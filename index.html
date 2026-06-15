@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía interactiva — Parcial OSPF + ACL en Packet Tracer</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --bg-2: #161b22;
+    --bg-3: #1c232c;
+    --border: #2a3340;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --accent: #4493f8;
+    --accent-2: #2f81f7;
+    --green: #3fb950;
+    --red: #f85149;
+    --yellow: #d29922;
+    --purple: #bc8cff;
+    --code-bg: #0d1117;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  aside {
+    width: 300px;
+    background: var(--bg-2);
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    top: 0; left: 0;
+  }
+  aside h1 {
+    font-size: 16px;
+    padding: 0 20px 16px;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+  }
+  aside h1 small { display:block; color: var(--text-dim); font-weight: normal; font-size: 12px; margin-top: 4px;}
+  .back-link {
+    display: block;
+    margin: 16px 20px;
+    padding: 8px 12px;
+    background: var(--bg-3);
+    color: var(--accent);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .back-link:hover { background: var(--accent); color: white; }
+  .progress-bar {
+    margin: 12px 20px;
+    height: 6px;
+    background: var(--bg-3);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), var(--accent));
+    width: 0%;
+    transition: width 0.3s;
+  }
+  .progress-text {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+  nav ul { list-style: none; }
+  nav a {
+    display: block;
+    padding: 10px 20px;
+    color: var(--text-dim);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  nav a:hover { background: var(--bg-3); color: var(--text); }
+  nav a.active { color: var(--accent); border-left-color: var(--accent); background: var(--bg-3); }
+  nav a .check { color: var(--green); margin-right: 6px; }
+  nav a .pending { color: var(--text-dim); margin-right: 6px; opacity: 0.4; }
+
+  /* Main */
+  main {
+    margin-left: 300px;
+    padding: 40px 60px;
+    max-width: 1100px;
+    width: calc(100% - 300px);
+  }
+  .module { display: none; animation: fade 0.3s; }
+  .module.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: none;} }
+
+  h2 {
+    color: var(--accent);
+    font-size: 28px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+  }
+  h2 .badge { font-size: 12px; background: var(--accent); color: white; padding: 4px 8px; border-radius: 12px; vertical-align: middle; margin-left: 8px; }
+  h3 {
+    color: var(--purple);
+    font-size: 20px;
+    margin: 28px 0 12px;
+    padding-left: 12px;
+    border-left: 4px solid var(--purple);
+  }
+  h4 { color: var(--text); font-size: 16px; margin: 20px 0 8px; }
+  p { margin-bottom: 12px; color: var(--text); }
+  ul, ol { margin: 8px 0 16px 24px; }
+  li { margin-bottom: 6px; }
+  strong { color: var(--yellow); }
+  em { color: var(--accent); font-style: normal; font-weight: 500; }
+
+  /* Code */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    font-family: "Consolas", "Monaco", monospace;
+    font-size: 13.5px;
+    position: relative;
+  }
+  pre code { color: #79c0ff; }
+  pre .comment { color: #6e7681; font-style: italic; }
+  pre .prompt { color: var(--green); user-select: none; }
+  .copy-btn {
+    position: absolute;
+    top: 8px; right: 8px;
+    background: var(--bg-3);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  pre:hover .copy-btn { opacity: 1; }
+  .copy-btn:hover { background: var(--accent); color: white; }
+  .copy-btn.copied { background: var(--green); color: white; }
+
+  code:not(pre code) {
+    background: var(--bg-3);
+    color: #ffa657;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-family: "Consolas", monospace;
+  }
+
+  /* Callouts */
+  .callout {
+    border-left: 4px solid;
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 6px 6px 0;
+    background: var(--bg-2);
+  }
+  .callout.do { border-color: var(--green); }
+  .callout.do::before { content: "✅ HACER: "; color: var(--green); font-weight: bold; }
+  .callout.dont { border-color: var(--red); }
+  .callout.dont::before { content: "❌ NO HACER: "; color: var(--red); font-weight: bold; }
+  .callout.warn { border-color: var(--yellow); }
+  .callout.warn::before { content: "⚠️ OJO: "; color: var(--yellow); font-weight: bold; }
+  .callout.tip { border-color: var(--accent); }
+  .callout.tip::before { content: "💡 TIP: "; color: var(--accent); font-weight: bold; }
+  .callout.theory { border-color: var(--purple); background: rgba(188,140,255,0.05); }
+  .callout.theory::before { content: "📘 TEORÍA: "; color: var(--purple); font-weight: bold; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    background: var(--bg-2);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  th, td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  th { background: var(--bg-3); color: var(--accent); font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg-3); }
+
+  /* Steps */
+  .step {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin: 14px 0;
+    position: relative;
+    padding-left: 60px;
+  }
+  .step-num {
+    position: absolute;
+    left: 16px;
+    top: 18px;
+    width: 32px;
+    height: 32px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  .step h4 { margin-top: 0; color: var(--accent); }
+
+  /* Checkpoint */
+  .checkpoint {
+    background: linear-gradient(135deg, rgba(63,185,80,0.1), rgba(68,147,248,0.1));
+    border: 1px solid var(--green);
+    border-radius: 8px;
+    padding: 18px;
+    margin: 24px 0;
+  }
+  .checkpoint h4 { color: var(--green); margin-top: 0; }
+  .checkpoint label {
+    display: block;
+    padding: 6px 0;
+    cursor: pointer;
+    user-select: none;
+  }
+  .checkpoint input[type="checkbox"] {
+    margin-right: 10px;
+    accent-color: var(--green);
+    cursor: pointer;
+    transform: scale(1.2);
+  }
+  .checkpoint label.checked { color: var(--text-dim); text-decoration: line-through; }
+
+  .module-complete-btn {
+    background: var(--green);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 16px;
+    transition: opacity 0.2s;
+  }
+  .module-complete-btn:hover { opacity: 0.9; }
+  .module-complete-btn.done { background: var(--bg-3); color: var(--text-dim); }
+
+  /* Nav buttons */
+  .module-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .module-nav button {
+    background: var(--bg-3);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .module-nav button:hover { background: var(--accent); border-color: var(--accent); }
+  .module-nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* Collapsible */
+  details {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 10px 0;
+  }
+  details summary {
+    cursor: pointer;
+    color: var(--accent);
+    font-weight: 600;
+    user-select: none;
+  }
+  details[open] summary { margin-bottom: 10px; }
+
+  /* Topology diagram */
+  .topo {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 16px 0;
+    text-align: center;
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--text-dim);
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  /* Mobile hamburger */
+  .menu-toggle { display: none; }
+  @media (max-width: 900px) {
+    aside { transform: translateX(-100%); transition: transform 0.3s; z-index: 100; }
+    aside.open { transform: translateX(0); }
+    main { margin-left: 0; padding: 20px; width: 100%; }
+    .menu-toggle {
+      display: block;
+      position: fixed;
+      top: 12px; right: 12px;
+      z-index: 101;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  }
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="document.querySelector('aside').classList.toggle('open')">☰ Menú</button>
+
+<aside>
+  <h1>🌐 Parcial OSPF + ACL
+    <small>Guía interactiva paso a paso</small>
+  </h1>
+  <a href="temas.html" class="back-link">📚 Ir a Temas del parcial →</a>
+  <div class="progress-bar"><div class="progress-bar-fill" id="progressFill"></div></div>
+  <div class="progress-text" id="progressText">0 / 10 módulos completados</div>
+  <nav>
+    <ul id="navList">
+      <li><a href="#" data-module="0"><span class="pending">○</span> 0. Preparación y conceptos base</a></li>
+      <li><a href="#" data-module="1"><span class="pending">○</span> 1. Armar el mapa de conectividad</a></li>
+      <li><a href="#" data-module="2"><span class="pending">○</span> 2. Plan de direccionamiento</a></li>
+      <li><a href="#" data-module="3"><span class="pending">○</span> 3. Configuración básica</a></li>
+      <li><a href="#" data-module="4"><span class="pending">○</span> 4. Teoría de routing y OSPF</a></li>
+      <li><a href="#" data-module="5"><span class="pending">○</span> 5. Configurar OSPF en R1, R2, R3</a></li>
+      <li><a href="#" data-module="6"><span class="pending">○</span> 6. Ruta por defecto y redistribución</a></li>
+      <li><a href="#" data-module="7"><span class="pending">○</span> 7. Verificación y pruebas</a></li>
+      <li><a href="#" data-module="9"><span class="pending">○</span> 8. ACL (extra)</a></li>
+      <li><a href="#" data-module="8"><span class="pending">○</span> 9. Cierre del parcial</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<main>
+
+<!-- ============== MÓDULO 0 ============== -->
+<section class="module" data-module="0">
+  <h2>Módulo 0 — Preparación y conceptos base <span class="badge">Empieza aquí</span></h2>
+  <p>Antes de tocar Packet Tracer necesitas entender qué estás viendo en la guía y qué significa cada palabra rara. Si saltas esto, todo lo demás suena a chino.</p>
+
+  <h3>¿Qué es Packet Tracer?</h3>
+  <p>Es un <em>simulador de redes</em> de Cisco. Te deja arrastrar routers, switches y PCs a un lienzo, conectarlos con cables, y entrar a sus consolas como si fueran equipos reales. No vas a romper nada: si te equivocas, borras y vuelves.</p>
+
+  <h3>La interfaz de Packet Tracer</h3>
+  <ul>
+    <li><strong>Lienzo central</strong>: el área grande donde pones tus equipos.</li>
+    <li><strong>Esquina inferior izquierda</strong>: catálogo de dispositivos. Iconos: <code>Routers</code>, <code>Switches</code>, <code>End Devices</code> (PCs y servidores), <code>Connections</code> (cables).</li>
+    <li><strong>Barra superior</strong>: <code>File</code> (Guardar/Abrir), zoom, herramienta de selección.</li>
+    <li><strong>Esquina inferior derecha (modo)</strong>: <code>Realtime</code> (todo pasa al instante) vs <code>Simulation</code> (ves los paquetes viajando — útil para depurar).</li>
+  </ul>
+
+  <h3>Vocabulario obligatorio</h3>
+  <table>
+    <tr><th>Término</th><th>Qué es</th></tr>
+    <tr><td><code>Router</code></td><td>Decide por dónde mandar paquetes entre redes distintas. En la guía: R1, R2, R3, ISP.</td></tr>
+    <tr><td><code>Switch</code></td><td>Conecta dispositivos de la <em>misma</em> red local (LAN). Aquí: S1, S2, S3.</td></tr>
+    <tr><td><code>IP</code></td><td>Dirección numérica de un dispositivo: <code>192.168.1.1</code>.</td></tr>
+    <tr><td><code>Máscara</code></td><td>Dice qué parte de la IP es "red" y qué parte es "host". <code>255.255.255.0</code> = /24.</td></tr>
+    <tr><td><code>Gateway</code></td><td>La IP del router al que la PC le envía el tráfico cuando quiere salir de su red.</td></tr>
+    <tr><td><code>Interfaz</code></td><td>Cada "puerto" físico de un router (FastEthernet0/0, Serial0/0/0, etc.).</td></tr>
+    <tr><td><code>CLI</code></td><td>Command Line Interface — la consola negra donde tecleas comandos.</td></tr>
+  </table>
+
+  <h3>Notación CIDR (/24, /30)</h3>
+  <div class="callout theory">
+    El número después de la <code>/</code> dice cuántos bits son de "red".
+    <ul>
+      <li><code>/24</code> → 24 bits de red, 8 bits de host → <strong>254 hosts útiles</strong>. Máscara <code>255.255.255.0</code>. Para LANs.</li>
+      <li><code>/30</code> → 30 bits de red, 2 bits de host → <strong>2 hosts útiles</strong>. Máscara <code>255.255.255.252</code>. Para enlaces punto a punto entre routers.</li>
+    </ul>
+  </div>
+
+  <h3>Cómo leer la topología de tu parcial</h3>
+  <div class="topo">
+   [PC1]---[S1]---[R1]===[R2]===[R3]---[S3]---[PC3]
+                          |
+                         [S2]---[PC2]
+                          |
+                       (ISP)---[Servidor Web 64.100.0.10]
+  </div>
+  <p>Las redes son:</p>
+  <table>
+    <tr><th>Red</th><th>Tipo</th><th>Dónde</th></tr>
+    <tr><td>192.168.1.0/24</td><td>LAN</td><td>PC1 ↔ S1 ↔ R1</td></tr>
+    <tr><td>192.168.2.0/30</td><td>Punto a punto</td><td>R1 ↔ R2</td></tr>
+    <tr><td>192.168.3.0/24</td><td>LAN</td><td>PC2 ↔ S2 ↔ R2</td></tr>
+    <tr><td>192.168.2.128/30</td><td>Punto a punto</td><td>R2 ↔ R3</td></tr>
+    <tr><td>192.168.4.0/24</td><td>LAN</td><td>PC3 ↔ S3 ↔ R3</td></tr>
+    <tr><td>200.21.17.0/30</td><td>Punto a punto</td><td>R1 ↔ ISP (salida a Internet)</td></tr>
+    <tr><td>64.100.0.0/?</td><td>Servidor externo</td><td>Servidor Web detrás del ISP</td></tr>
+  </table>
+
+  <div class="callout tip">Guarda tu archivo de Packet Tracer cada vez que termines un módulo. Usa <code>File → Save As → parcial_ospf.pkt</code>. Si algo explota, vuelves al último guardado.</div>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Módulo 0</h4>
+    <label><input type="checkbox" data-check="m0-1"> Entiendo qué es Packet Tracer y abrí el programa</label>
+    <label><input type="checkbox" data-check="m0-2"> Sé diferenciar router, switch y PC</label>
+    <label><input type="checkbox" data-check="m0-3"> Entiendo qué significa /24 vs /30</label>
+    <label><input type="checkbox" data-check="m0-4"> Identifico las 6 redes de la topología</label>
+    <button class="module-complete-btn" data-complete="0">Marcar módulo completado</button>
+  </div>
+
+  <div class="module-nav">
+    <button disabled>← Anterior</button>
+    <button data-goto="1">Siguiente: Armar el mapa →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 1 ============== -->
+<section class="module" data-module="1">
+  <h2>Módulo 1 — Parte 1: Armar el mapa de conectividad <span class="badge">5 pts</span></h2>
+  <p>Aquí vas a poner físicamente todos los equipos en el lienzo y conectarlos como dice la imagen del parcial.</p>
+
+  <h3>Dispositivos que necesitas</h3>
+  <table>
+    <tr><th>Cantidad</th><th>Tipo</th><th>Modelo recomendado en PT</th></tr>
+    <tr><td>4</td><td>Router</td><td><code>2901</code> o <code>1941</code> (R1, R2, R3, ISP)</td></tr>
+    <tr><td>3</td><td>Switch</td><td><code>2960</code> (S1, S2, S3)</td></tr>
+    <tr><td>3</td><td>PC</td><td><code>PC-PT</code> (PC1, PC2, PC3)</td></tr>
+    <tr><td>1</td><td>Servidor</td><td><code>Server-PT</code> (Servidor Web)</td></tr>
+  </table>
+
+  <div class="callout warn">Los routers Cisco 2901/1941 traen solo 2 interfaces GigabitEthernet por defecto. Para los enlaces seriales entre routers necesitas <strong>agregar un módulo HWIC-2T</strong> (lo veremos en el paso 2).</div>
+
+  <h3>Paso a paso (cada clic)</h3>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <h4>Abrir Packet Tracer y crear nuevo archivo</h4>
+    <ol>
+      <li>Abre Cisco Packet Tracer.</li>
+      <li><code>File → New</code> (o <kbd>Ctrl+N</kbd>).</li>
+      <li><code>File → Save As</code> → guárdalo como <code>parcial_ospf.pkt</code>.</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <h4>Agregar los routers</h4>
+    <ol>
+      <li>Abajo a la izquierda, clic en el ícono de <code>Network Devices</code> (router naranja).</li>
+      <li>Clic en <code>Routers</code>.</li>
+      <li>Arrastra <strong>4 routers 2901</strong> al lienzo. Acomódalos así: R1 (izquierda), R2 (centro), R3 (derecha), ISP (abajo).</li>
+      <li>Renómbralos: clic en cada router → pestaña <code>Config</code> → cambia <code>Display Name</code> a <code>R1</code>, <code>R2</code>, <code>R3</code>, <code>ISP</code>.</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <h4>Agregar módulos seriales a los routers</h4>
+    <p>Cada enlace router-a-router es serial. Necesitas agregar el módulo <code>HWIC-2T</code> en R1, R2, R3 (mínimo R1 y R3 necesitan 1, R2 necesita 2 porque conecta a R1 y a R3).</p>
+    <ol>
+      <li>Clic en el router → se abre la ventana del dispositivo.</li>
+      <li>Pestaña <code>Physical</code>.</li>
+      <li><strong>APAGA el router</strong>: clic en el botón de encendido (el redondito en la imagen del router).</li>
+      <li>En la lista de módulos a la izquierda, busca <code>HWIC-2T</code>.</li>
+      <li>Arrástralo a un slot vacío del router (los rectangulares en la imagen).</li>
+      <li><strong>ENCIENDE el router</strong> de nuevo.</li>
+      <li>Repite en cada router que necesite seriales.</li>
+    </ol>
+    <div class="callout dont">Si arrastras el módulo sin apagar el router, Packet Tracer no te deja y te tira error. Acuérdate del botón de encendido siempre.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">4</div>
+    <h4>Agregar switches, PCs y servidor</h4>
+    <ol>
+      <li>Catálogo → <code>Switches</code> → arrastra <strong>3 switches 2960</strong> (S1, S2, S3).</li>
+      <li>Catálogo → <code>End Devices</code> → arrastra <strong>3 PC-PT</strong> (PC1, PC2, PC3) y <strong>1 Server-PT</strong>.</li>
+      <li>Renómbralos en su <code>Config → Display Name</code>.</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <div class="step-num">5</div>
+    <h4>Cablear todo</h4>
+    <p>Catálogo → ícono de rayo amarillo (<code>Connections</code>). Tipos que usarás:</p>
+    <table>
+      <tr><th>Cable</th><th>Para qué</th></tr>
+      <tr><td><code>Copper Straight-Through</code> (línea sólida negra)</td><td>PC ↔ Switch, Switch ↔ Router</td></tr>
+      <tr><td><code>Serial DCE</code> (rayo rojo)</td><td>Router ↔ Router (uno de los lados es DCE — el que da el clock)</td></tr>
+    </table>
+    <p>Conexiones a hacer (clic en el cable, luego clic en cada dispositivo y elige el puerto):</p>
+    <table>
+      <tr><th>De</th><th>Puerto</th><th>A</th><th>Puerto</th><th>Cable</th></tr>
+      <tr><td>PC1</td><td>FastEthernet0</td><td>S1</td><td>FastEthernet0/1</td><td>Cobre directo</td></tr>
+      <tr><td>S1</td><td>FastEthernet0/2</td><td>R1</td><td>GigabitEthernet0/0</td><td>Cobre directo</td></tr>
+      <tr><td>R1</td><td>Serial0/0/0</td><td>R2</td><td>Serial0/0/0</td><td>Serial DCE (DCE en R1)</td></tr>
+      <tr><td>PC2</td><td>FastEthernet0</td><td>S2</td><td>FastEthernet0/1</td><td>Cobre directo</td></tr>
+      <tr><td>S2</td><td>FastEthernet0/2</td><td>R2</td><td>GigabitEthernet0/0</td><td>Cobre directo</td></tr>
+      <tr><td>R2</td><td>Serial0/0/1</td><td>R3</td><td>Serial0/0/0</td><td>Serial DCE (DCE en R2)</td></tr>
+      <tr><td>PC3</td><td>FastEthernet0</td><td>S3</td><td>FastEthernet0/1</td><td>Cobre directo</td></tr>
+      <tr><td>S3</td><td>FastEthernet0/2</td><td>R3</td><td>GigabitEthernet0/0</td><td>Cobre directo</td></tr>
+      <tr><td>R1</td><td>Serial0/0/1</td><td>ISP</td><td>Serial0/0/0</td><td>Serial DCE (DCE en R1)</td></tr>
+      <tr><td>ISP</td><td>GigabitEthernet0/0</td><td>Servidor Web</td><td>FastEthernet0</td><td>Cobre directo</td></tr>
+    </table>
+    <div class="callout tip">Las luces de los cables deben ponerse <strong>verdes</strong> después de unos segundos. Si quedan rojas → algo está mal (interfaz apagada o cable incorrecto). En este punto las seriales pueden quedar rojas porque aún no las configuramos — eso se arregla en el Módulo 3.</div>
+  </div>
+
+  <div class="callout do">Después de cablear todo, <strong>guarda</strong> (<kbd>Ctrl+S</kbd>). Compara visualmente tu diagrama con el de la guía: misma cantidad de equipos, mismos cables.</div>
+  <div class="callout dont">No conectes PCs directo a routers en este parcial — todos pasan por su switch. Si la guía dice S1 entre PC1 y R1, así debe ser.</div>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Módulo 1</h4>
+    <label><input type="checkbox" data-check="m1-1"> 4 routers, 3 switches, 3 PCs y 1 servidor en el lienzo</label>
+    <label><input type="checkbox" data-check="m1-2"> Todos renombrados (R1, R2, R3, ISP, S1, S2, S3, PC1...)</label>
+    <label><input type="checkbox" data-check="m1-3"> Módulos HWIC-2T agregados a R1, R2, R3</label>
+    <label><input type="checkbox" data-check="m1-4"> Todos los cables puestos según la tabla</label>
+    <label><input type="checkbox" data-check="m1-5"> Archivo guardado como parcial_ospf.pkt</label>
+    <button class="module-complete-btn" data-complete="1">Marcar módulo completado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="0">← Anterior</button>
+    <button data-goto="2">Siguiente: Direccionamiento →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 2 ============== -->
+<section class="module" data-module="2">
+  <h2>Módulo 2 — Plan de direccionamiento <span class="badge">Preparación</span></h2>
+  <p>Antes de tocar la CLI, vamos a definir <strong>qué IP exacta va en cada interfaz</strong>. Si esto está bien, el resto es copiar y pegar.</p>
+
+  <h3>¿Por qué unas redes son /24 y otras /30?</h3>
+  <div class="callout theory">
+    <ul>
+      <li><strong>LAN (/24)</strong>: caben hasta 254 dispositivos. PCs y servidores viven aquí.</li>
+      <li><strong>Enlaces seriales router-router (/30)</strong>: solo 2 dispositivos (los dos routers). Usar /24 sería desperdiciar 252 IPs. Por eso /30 = exactamente 2 hosts útiles.</li>
+    </ul>
+  </div>
+
+  <h3>Cómo calcular las IPs útiles de un /30</h3>
+  <p>Una red /30 tiene 4 direcciones: <strong>red, host1, host2, broadcast</strong>. Ejemplo con <code>192.168.2.0/30</code>:</p>
+  <table>
+    <tr><th>Dirección</th><th>Rol</th></tr>
+    <tr><td>192.168.2.0</td><td>Red (no se asigna)</td></tr>
+    <tr><td>192.168.2.1</td><td>Host útil → R1</td></tr>
+    <tr><td>192.168.2.2</td><td>Host útil → R2</td></tr>
+    <tr><td>192.168.2.3</td><td>Broadcast (no se asigna)</td></tr>
+  </table>
+
+  <h3>Tabla completa de direccionamiento (la que vas a configurar)</h3>
+  <table>
+    <tr><th>Dispositivo</th><th>Interfaz</th><th>IP</th><th>Máscara</th><th>Gateway</th></tr>
+    <tr><td>R1</td><td>G0/0 (LAN PC1)</td><td>192.168.1.1</td><td>255.255.255.0</td><td>—</td></tr>
+    <tr><td>R1</td><td>S0/0/0 (a R2)</td><td>192.168.2.1</td><td>255.255.255.252</td><td>—</td></tr>
+    <tr><td>R1</td><td>S0/0/1 (a ISP)</td><td>200.21.17.1</td><td>255.255.255.252</td><td>—</td></tr>
+    <tr><td>R2</td><td>G0/0 (LAN PC2)</td><td>192.168.3.1</td><td>255.255.255.0</td><td>—</td></tr>
+    <tr><td>R2</td><td>S0/0/0 (a R1)</td><td>192.168.2.2</td><td>255.255.255.252</td><td>—</td></tr>
+    <tr><td>R2</td><td>S0/0/1 (a R3)</td><td>192.168.2.129</td><td>255.255.255.252</td><td>—</td></tr>
+    <tr><td>R3</td><td>G0/0 (LAN PC3)</td><td>192.168.4.1</td><td>255.255.255.0</td><td>—</td></tr>
+    <tr><td>R3</td><td>S0/0/0 (a R2)</td><td>192.168.2.130</td><td>255.255.255.252</td><td>—</td></tr>
+    <tr><td>ISP</td><td>S0/0/0 (a R1)</td><td>200.21.17.2</td><td>255.255.255.252</td><td>—</td></tr>
+    <tr><td>ISP</td><td>G0/0 (a Servidor)</td><td>64.100.0.1</td><td>255.255.255.0</td><td>—</td></tr>
+    <tr><td>PC1</td><td>FastEthernet0</td><td>192.168.1.10</td><td>255.255.255.0</td><td>192.168.1.1</td></tr>
+    <tr><td>PC2</td><td>FastEthernet0</td><td>192.168.3.10</td><td>255.255.255.0</td><td>192.168.3.1</td></tr>
+    <tr><td>PC3</td><td>FastEthernet0</td><td>192.168.4.10</td><td>255.255.255.0</td><td>192.168.4.1</td></tr>
+    <tr><td>Servidor Web</td><td>FastEthernet0</td><td>64.100.0.10</td><td>255.255.255.0</td><td>64.100.0.1</td></tr>
+  </table>
+
+  <div class="callout tip">El gateway de cada PC es <strong>la IP del router al que está conectada por su LAN</strong>. PC1 → su gateway es R1.G0/0 = 192.168.1.1. Lógico: cuando PC1 quiera salir de su red, le pide ayuda a R1.</div>
+
+  <h3>Wildcard masks (para más tarde en OSPF)</h3>
+  <p>Una wildcard es la <em>inversa</em> de la máscara. Reemplazas 255 por 0 y 0 por 255:</p>
+  <table>
+    <tr><th>Máscara</th><th>Wildcard</th><th>Para qué red</th></tr>
+    <tr><td>255.255.255.0 (/24)</td><td>0.0.0.255</td><td>LANs</td></tr>
+    <tr><td>255.255.255.252 (/30)</td><td>0.0.0.3</td><td>Enlaces seriales</td></tr>
+  </table>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Módulo 2</h4>
+    <label><input type="checkbox" data-check="m2-1"> Entiendo por qué /24 vs /30</label>
+    <label><input type="checkbox" data-check="m2-2"> Tengo la tabla impresa o a la vista</label>
+    <label><input type="checkbox" data-check="m2-3"> Sé calcular wildcard mask</label>
+    <button class="module-complete-btn" data-complete="2">Marcar módulo completado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="1">← Anterior</button>
+    <button data-goto="3">Siguiente: Configuración básica →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 3 ============== -->
+<section class="module" data-module="3">
+  <h2>Módulo 3 — Parte 2: Configuración básica <span class="badge">10 pts</span></h2>
+  <p>Vamos a entrar a cada router por consola y ponerle: nombre, password, las medidas de seguridad básicas y las IPs en sus interfaces. Lo mismo (más simple) para las PCs.</p>
+
+  <h3>Cómo entrar a la CLI de un router</h3>
+  <ol>
+    <li>Clic en el router (R1).</li>
+    <li>Pestaña <code>CLI</code>.</li>
+    <li>Si pregunta <code>Continue with configuration dialog? [yes/no]</code> → escribe <code>no</code> y Enter.</li>
+    <li>Presiona Enter hasta ver <code>Router></code>.</li>
+  </ol>
+
+  <h3>Los 3 modos del IOS</h3>
+  <table>
+    <tr><th>Prompt</th><th>Modo</th><th>Cómo se entra</th></tr>
+    <tr><td><code>Router></code></td><td>Usuario (mirar)</td><td>Al entrar</td></tr>
+    <tr><td><code>Router#</code></td><td>Privilegiado (hacer)</td><td>Comando <code>enable</code></td></tr>
+    <tr><td><code>Router(config)#</code></td><td>Configuración global</td><td>Comando <code>configure terminal</code></td></tr>
+  </table>
+
+  <h3>Plantilla de configuración básica (R1)</h3>
+  <p>Copia esto en la CLI de R1. Después adaptas hostname e IPs para R2, R3 e ISP.</p>
+  <pre><span class="prompt">Router></span> enable
+<span class="prompt">Router#</span> configure terminal
+<span class="prompt">Router(config)#</span> hostname R1
+<span class="prompt">R1(config)#</span> no ip domain-lookup
+<span class="prompt">R1(config)#</span> enable secret cisco123
+<span class="prompt">R1(config)#</span> service password-encryption
+<span class="prompt">R1(config)#</span> banner motd #Acceso autorizado solamente#
+<span class="prompt">R1(config)#</span> line console 0
+<span class="prompt">R1(config-line)#</span> password class123
+<span class="prompt">R1(config-line)#</span> login
+<span class="prompt">R1(config-line)#</span> exit
+<span class="prompt">R1(config)#</span> line vty 0 4
+<span class="prompt">R1(config-line)#</span> password class123
+<span class="prompt">R1(config-line)#</span> login
+<span class="prompt">R1(config-line)#</span> exit</pre>
+
+  <h3>¿Qué hace cada comando?</h3>
+  <ul>
+    <li><code>hostname R1</code>: el nombre que sale en el prompt.</li>
+    <li><code>no ip domain-lookup</code>: evita que el router intente resolver palabras mal escritas como si fueran dominios (te ahorra el "esperando 30 segundos cuando tecleas mal").</li>
+    <li><code>enable secret</code>: contraseña para entrar a modo privilegiado (encriptada).</li>
+    <li><code>service password-encryption</code>: encripta TODAS las demás contraseñas que ya pusiste o pongas.</li>
+    <li><code>line console 0</code>: configura la conexión por cable consola física.</li>
+    <li><code>line vty 0 4</code>: configura las 5 sesiones Telnet/SSH virtuales.</li>
+  </ul>
+
+  <h3>Configurar interfaces de R1</h3>
+  <pre><span class="prompt">R1(config)#</span> interface GigabitEthernet0/0
+<span class="prompt">R1(config-if)#</span> ip address 192.168.1.1 255.255.255.0
+<span class="prompt">R1(config-if)#</span> no shutdown
+<span class="prompt">R1(config-if)#</span> exit
+<span class="prompt">R1(config)#</span> interface Serial0/0/0
+<span class="prompt">R1(config-if)#</span> ip address 192.168.2.1 255.255.255.252
+<span class="prompt">R1(config-if)#</span> clock rate 64000
+<span class="prompt">R1(config-if)#</span> no shutdown
+<span class="prompt">R1(config-if)#</span> exit
+<span class="prompt">R1(config)#</span> interface Serial0/0/1
+<span class="prompt">R1(config-if)#</span> ip address 200.21.17.1 255.255.255.252
+<span class="prompt">R1(config-if)#</span> clock rate 64000
+<span class="prompt">R1(config-if)#</span> no shutdown
+<span class="prompt">R1(config-if)#</span> exit</pre>
+
+  <div class="callout warn"><code>clock rate 64000</code> solo se pone del lado DCE del enlace serial. Si el cable terminó del otro lado por error, en R2/R3 te dirá "Invalid input" — eso te dice quién es el DCE.</div>
+  <div class="callout dont">No olvides <code>no shutdown</code> en cada interfaz. Por defecto las interfaces de router vienen apagadas y nada funciona.</div>
+
+  <h3>Guardar la configuración</h3>
+  <pre><span class="prompt">R1(config-if)#</span> end
+<span class="prompt">R1#</span> copy running-config startup-config
+<span class="comment">! Presiona Enter para confirmar</span></pre>
+  <div class="callout tip">Si no guardas con <code>copy run start</code>, cuando "reinicies" el router pierdes todo. Atajo: <code>wr</code> hace lo mismo.</div>
+
+  <h3>Repetir para R2, R3 e ISP</h3>
+  <details>
+    <summary>Ver configuración de interfaces R2</summary>
+    <pre><span class="prompt">R2(config)#</span> interface GigabitEthernet0/0
+<span class="prompt">R2(config-if)#</span> ip address 192.168.3.1 255.255.255.0
+<span class="prompt">R2(config-if)#</span> no shutdown
+<span class="prompt">R2(config-if)#</span> exit
+<span class="prompt">R2(config)#</span> interface Serial0/0/0
+<span class="prompt">R2(config-if)#</span> ip address 192.168.2.2 255.255.255.252
+<span class="prompt">R2(config-if)#</span> no shutdown
+<span class="prompt">R2(config-if)#</span> exit
+<span class="prompt">R2(config)#</span> interface Serial0/0/1
+<span class="prompt">R2(config-if)#</span> ip address 192.168.2.129 255.255.255.252
+<span class="prompt">R2(config-if)#</span> clock rate 64000
+<span class="prompt">R2(config-if)#</span> no shutdown</pre>
+  </details>
+  <details>
+    <summary>Ver configuración de interfaces R3</summary>
+    <pre><span class="prompt">R3(config)#</span> interface GigabitEthernet0/0
+<span class="prompt">R3(config-if)#</span> ip address 192.168.4.1 255.255.255.0
+<span class="prompt">R3(config-if)#</span> no shutdown
+<span class="prompt">R3(config-if)#</span> exit
+<span class="prompt">R3(config)#</span> interface Serial0/0/0
+<span class="prompt">R3(config-if)#</span> ip address 192.168.2.130 255.255.255.252
+<span class="prompt">R3(config-if)#</span> no shutdown</pre>
+  </details>
+  <details>
+    <summary>Ver configuración de interfaces ISP</summary>
+    <pre><span class="prompt">ISP(config)#</span> interface GigabitEthernet0/0
+<span class="prompt">ISP(config-if)#</span> ip address 64.100.0.1 255.255.255.0
+<span class="prompt">ISP(config-if)#</span> no shutdown
+<span class="prompt">ISP(config-if)#</span> exit
+<span class="prompt">ISP(config)#</span> interface Serial0/0/0
+<span class="prompt">ISP(config-if)#</span> ip address 200.21.17.2 255.255.255.252
+<span class="prompt">ISP(config-if)#</span> no shutdown</pre>
+  </details>
+
+  <h3>Configurar PCs (no es CLI — es GUI)</h3>
+  <ol>
+    <li>Clic en PC1.</li>
+    <li>Pestaña <code>Desktop</code>.</li>
+    <li>Clic en <code>IP Configuration</code>.</li>
+    <li>Selecciona <code>Static</code>.</li>
+    <li>Llena:
+      <ul>
+        <li><code>IP Address: 192.168.1.10</code></li>
+        <li><code>Subnet Mask: 255.255.255.0</code></li>
+        <li><code>Default Gateway: 192.168.1.1</code></li>
+      </ul>
+    </li>
+    <li>Cierra la ventana.</li>
+  </ol>
+  <p>Repite para PC2 (<code>192.168.3.10 / gw 192.168.3.1</code>) y PC3 (<code>192.168.4.10 / gw 192.168.4.1</code>).</p>
+
+  <h3>Configurar Servidor Web</h3>
+  <ol>
+    <li>Clic en el servidor.</li>
+    <li>Pestaña <code>Desktop → IP Configuration</code>: <code>64.100.0.10 / 255.255.255.0 / gw 64.100.0.1</code>.</li>
+    <li>Pestaña <code>Services → HTTP</code>: ya viene encendido por defecto, verifica que <code>HTTP: On</code>.</li>
+  </ol>
+
+  <h3>Verificación rápida (en cualquier router)</h3>
+  <pre><span class="prompt">R1#</span> show ip interface brief</pre>
+  <p>Debes ver todas las interfaces que configuraste con su IP y estado <code>up/up</code>. Si ves <code>administratively down</code> → olvidaste <code>no shutdown</code>. Si ves <code>down/down</code> → cable o interfaz del otro lado mal.</p>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Módulo 3</h4>
+    <label><input type="checkbox" data-check="m3-1"> R1, R2, R3, ISP con hostname y password</label>
+    <label><input type="checkbox" data-check="m3-2"> Todas las interfaces de routers con IP y up/up</label>
+    <label><input type="checkbox" data-check="m3-3"> PC1, PC2, PC3 con IP estática y gateway</label>
+    <label><input type="checkbox" data-check="m3-4"> Servidor Web con IP y HTTP encendido</label>
+    <label><input type="checkbox" data-check="m3-5"> Configuración guardada con copy run start</label>
+    <label><input type="checkbox" data-check="m3-6"> Ping de PC1 a su gateway (192.168.1.1) funciona</label>
+    <button class="module-complete-btn" data-complete="3">Marcar módulo completado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="2">← Anterior</button>
+    <button data-goto="4">Siguiente: Teoría OSPF →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 4 ============== -->
+<section class="module" data-module="4">
+  <h2>Módulo 4 — Teoría de routing y OSPF <span class="badge">La base</span></h2>
+  <p>Si configuras OSPF sin entender qué hace, todo va a parecer magia y cuando algo falle no sabrás dónde buscar. 10 minutos de teoría aquí te ahorran 2 horas de dolor.</p>
+
+  <h3>¿Qué es una tabla de routing?</h3>
+  <p>Cada router tiene una "tabla" interna que dice: <em>"para llegar a la red X, manda el paquete por la interfaz Y"</em>. Cuando llega un paquete, el router mira la IP destino, busca en su tabla y lo reenvía. Si no encuentra coincidencia, lo descarta.</p>
+  <pre><span class="prompt">R1#</span> show ip route
+<span class="comment">Códigos: C = conectada, L = local, S = estática, O = OSPF, * = candidato por defecto</span>
+C    192.168.1.0/24 is directly connected, GigabitEthernet0/0
+L    192.168.1.1/32 is directly connected, GigabitEthernet0/0
+O    192.168.3.0/24 [110/65] via 192.168.2.2, 00:01:23, Serial0/0/0</pre>
+
+  <h3>Tipos de rutas</h3>
+  <table>
+    <tr><th>Letra</th><th>Tipo</th><th>De dónde viene</th></tr>
+    <tr><td><code>C</code></td><td>Directamente conectada</td><td>El router la sabe porque tiene una interfaz en esa red</td></tr>
+    <tr><td><code>L</code></td><td>Local</td><td>La IP exacta de su propia interfaz (/32)</td></tr>
+    <tr><td><code>S</code></td><td>Estática</td><td>Tú la escribiste a mano</td></tr>
+    <tr><td><code>O</code></td><td>OSPF</td><td>Otro router le contó de esa red por OSPF</td></tr>
+    <tr><td><code>O*E2</code></td><td>OSPF default redistribuida</td><td>Es la ruta por defecto que entró por OSPF (Parte 4)</td></tr>
+  </table>
+
+  <h3>¿Por qué OSPF y no rutas estáticas?</h3>
+  <div class="callout theory">
+    Con rutas estáticas, en cada router tendrías que escribir manualmente: "para llegar a la red de R3, pasa por R2". Si agregas una red nueva, tienes que ir a TODOS los routers a actualizar. Si un enlace cae, nadie se entera.<br><br>
+    Con <strong>OSPF</strong>, cada router le grita a sus vecinos: "yo conozco estas redes". Los vecinos se lo cuentan a los suyos. La red entera se "auto-aprende" y si algo cambia, los routers se reorganizan solos.
+  </div>
+
+  <h3>Conceptos OSPF que necesitas saber</h3>
+  <ul>
+    <li><strong>Process ID</strong>: un número local (1-65535) que identifica el proceso OSPF en ese router. Puede ser distinto en cada router. En esta guía usaremos <code>1</code>.</li>
+    <li><strong>Area</strong>: OSPF divide la red en áreas. En redes pequeñas todo va al <code>area 0</code> (área backbone). Aquí solo usamos área 0.</li>
+    <li><strong>Network statement</strong>: le dices al router "estas redes mías participan en OSPF y por estas interfaces envío hellos a vecinos".</li>
+    <li><strong>Wildcard mask</strong>: en el <code>network</code> de OSPF, en vez de máscara normal usas wildcard (la inversa).</li>
+    <li><strong>Router-ID</strong>: una IP única que identifica al router en OSPF. Si no la pones, OSPF agarra la IP más alta de las interfaces.</li>
+    <li><strong>Interfaz pasiva</strong>: una interfaz por la que NO mandas hellos OSPF (típicamente las LAN, porque ahí no hay otro router con quien hablar — solo PCs).</li>
+  </ul>
+
+  <h3>Wildcard mask en OSPF</h3>
+  <table>
+    <tr><th>Red</th><th>Máscara</th><th>Wildcard (para OSPF)</th></tr>
+    <tr><td>192.168.1.0/24</td><td>255.255.255.0</td><td>0.0.0.255</td></tr>
+    <tr><td>192.168.2.0/30</td><td>255.255.255.252</td><td>0.0.0.3</td></tr>
+    <tr><td>192.168.2.128/30</td><td>255.255.255.252</td><td>0.0.0.3</td></tr>
+  </table>
+  <p>Truco mental: 255 - máscara_octeto. <code>255-255=0</code>, <code>255-252=3</code>.</p>
+
+  <h3>¿Por qué interfaz pasiva en las LAN?</h3>
+  <div class="callout theory">
+    OSPF manda "hello packets" cada 10 segundos para encontrar vecinos. Por una interfaz LAN solo hay PCs — no hay otro router. Mandar hellos ahí desperdicia ancho de banda y, peor, <em>expone</em> información del routing a las PCs (riesgo de seguridad). Por eso marcas las LAN como pasivas: la red se sigue anunciando, pero no envías hellos por esa interfaz.
+  </div>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Módulo 4</h4>
+    <label><input type="checkbox" data-check="m4-1"> Entiendo qué es una tabla de routing</label>
+    <label><input type="checkbox" data-check="m4-2"> Distingo C, L, S, O en show ip route</label>
+    <label><input type="checkbox" data-check="m4-3"> Sé calcular wildcard de /24 y /30</label>
+    <label><input type="checkbox" data-check="m4-4"> Entiendo por qué interfaz pasiva en LAN</label>
+    <button class="module-complete-btn" data-complete="4">Marcar módulo completado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="3">← Anterior</button>
+    <button data-goto="5">Siguiente: Configurar OSPF →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 5 ============== -->
+<section class="module" data-module="5">
+  <h2>Módulo 5 — Parte 3: Configurar OSPF <span class="badge">30 pts</span></h2>
+  <p>Esta es la parte que más pesa en el parcial. Vamos router por router.</p>
+
+  <h3>Plantilla general</h3>
+  <pre><span class="prompt">R(config)#</span> router ospf 1
+<span class="prompt">R(config-router)#</span> router-id X.X.X.X
+<span class="prompt">R(config-router)#</span> network RED_X wildcard area 0
+<span class="prompt">R(config-router)#</span> network RED_Y wildcard area 0
+<span class="prompt">R(config-router)#</span> passive-interface INTERFAZ_LAN</pre>
+
+  <h3>R1 — Configuración OSPF</h3>
+  <p>R1 tiene 3 interfaces, pero la que va al ISP NO la metemos en OSPF (el ISP no es nuestro, no hablamos OSPF con él).</p>
+  <pre><span class="prompt">R1#</span> configure terminal
+<span class="prompt">R1(config)#</span> router ospf 1
+<span class="prompt">R1(config-router)#</span> router-id 1.1.1.1
+<span class="prompt">R1(config-router)#</span> network 192.168.1.0 0.0.0.255 area 0
+<span class="prompt">R1(config-router)#</span> network 192.168.2.0 0.0.0.3 area 0
+<span class="prompt">R1(config-router)#</span> passive-interface GigabitEthernet0/0
+<span class="prompt">R1(config-router)#</span> end
+<span class="prompt">R1#</span> copy running-config startup-config</pre>
+
+  <h4>¿Qué pasó aquí?</h4>
+  <ul>
+    <li><code>router ospf 1</code>: arrancas OSPF con process-id 1.</li>
+    <li><code>router-id 1.1.1.1</code>: identificador único en OSPF. Convención: usar 1.1.1.1, 2.2.2.2, 3.3.3.3 para R1, R2, R3.</li>
+    <li><code>network 192.168.1.0 0.0.0.255 area 0</code>: anuncia la LAN de PC1.</li>
+    <li><code>network 192.168.2.0 0.0.0.3 area 0</code>: anuncia el enlace a R2 (donde por esta interfaz SÍ mandamos hellos).</li>
+    <li><code>passive-interface G0/0</code>: la LAN se anuncia pero no manda hellos.</li>
+  </ul>
+  <div class="callout dont">NO anuncies la red 200.21.17.0/30 (la del ISP) en OSPF. Si lo haces, el ISP no responde y además expones esa red. La ruta hacia el ISP se maneja con la ruta por defecto en el Módulo 6.</div>
+
+  <h3>R2 — Configuración OSPF</h3>
+  <p>R2 está al medio: tiene 1 LAN (PC2) y 2 enlaces seriales (a R1 y a R3). Los 3 van en OSPF, la LAN va pasiva.</p>
+  <pre><span class="prompt">R2#</span> configure terminal
+<span class="prompt">R2(config)#</span> router ospf 1
+<span class="prompt">R2(config-router)#</span> router-id 2.2.2.2
+<span class="prompt">R2(config-router)#</span> network 192.168.3.0 0.0.0.255 area 0
+<span class="prompt">R2(config-router)#</span> network 192.168.2.0 0.0.0.3 area 0
+<span class="prompt">R2(config-router)#</span> network 192.168.2.128 0.0.0.3 area 0
+<span class="prompt">R2(config-router)#</span> passive-interface GigabitEthernet0/0
+<span class="prompt">R2(config-router)#</span> end
+<span class="prompt">R2#</span> copy running-config startup-config</pre>
+
+  <h3>R3 — Configuración OSPF</h3>
+  <pre><span class="prompt">R3#</span> configure terminal
+<span class="prompt">R3(config)#</span> router ospf 1
+<span class="prompt">R3(config-router)#</span> router-id 3.3.3.3
+<span class="prompt">R3(config-router)#</span> network 192.168.4.0 0.0.0.255 area 0
+<span class="prompt">R3(config-router)#</span> network 192.168.2.128 0.0.0.3 area 0
+<span class="prompt">R3(config-router)#</span> passive-interface GigabitEthernet0/0
+<span class="prompt">R3(config-router)#</span> end
+<span class="prompt">R3#</span> copy running-config startup-config</pre>
+
+  <h3>Verificar que OSPF funciona</h3>
+  <pre><span class="prompt">R1#</span> show ip ospf neighbor</pre>
+  <p>Debes ver a R2 como vecino. Algo así:</p>
+  <pre><span class="comment">Neighbor ID  Pri  State    Dead Time  Address      Interface
+2.2.2.2      0    FULL/-   00:00:35   192.168.2.2  Serial0/0/0</span></pre>
+  <p>Si <code>State</code> es <code>FULL</code> → todo bien. Si está en <code>INIT</code>, <code>EXSTART</code> o no aparece → algo no funcionó.</p>
+
+  <h3>Errores comunes y diagnóstico</h3>
+  <div class="callout warn">
+    <strong>No aparecen vecinos:</strong>
+    <ul>
+      <li>¿La interfaz serial está <code>up/up</code>? Verifica con <code>show ip interface brief</code>.</li>
+      <li>¿Las wildcards están bien? Una wildcard mal escrita hace que OSPF ignore la interfaz.</li>
+      <li>¿Ambos routers están en area 0?</li>
+      <li>¿Las IPs de los seriales están en la misma red /30?</li>
+    </ul>
+  </div>
+
+  <h3>Comandos útiles de OSPF</h3>
+  <pre><span class="prompt">R1#</span> show ip ospf neighbor       <span class="comment">! Lista vecinos OSPF</span>
+<span class="prompt">R1#</span> show ip ospf interface brief <span class="comment">! Qué interfaces participan</span>
+<span class="prompt">R1#</span> show ip protocols            <span class="comment">! Resumen de OSPF y sus networks</span>
+<span class="prompt">R1#</span> show ip route ospf           <span class="comment">! Solo rutas aprendidas por OSPF</span></pre>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Módulo 5</h4>
+    <label><input type="checkbox" data-check="m5-1"> OSPF configurado en R1 con sus 2 networks</label>
+    <label><input type="checkbox" data-check="m5-2"> OSPF configurado en R2 con sus 3 networks</label>
+    <label><input type="checkbox" data-check="m5-3"> OSPF configurado en R3 con sus 2 networks</label>
+    <label><input type="checkbox" data-check="m5-4"> Las 3 LAN están como passive-interface</label>
+    <label><input type="checkbox" data-check="m5-5"> show ip ospf neighbor en R2 muestra a R1 Y a R3</label>
+    <label><input type="checkbox" data-check="m5-6"> show ip route en R1 muestra rutas O hacia 192.168.3.0 y 192.168.4.0</label>
+    <button class="module-complete-btn" data-complete="5">Marcar módulo completado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="4">← Anterior</button>
+    <button data-goto="6">Siguiente: Ruta por defecto →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 6 ============== -->
+<section class="module" data-module="6">
+  <h2>Módulo 6 — Parte 4: Ruta por defecto y redistribución <span class="badge">10 pts</span></h2>
+  <p>OSPF solo conoce las redes "internas" (192.168.x.x). El Servidor Web (64.100.0.10) está fuera. Necesitas una <strong>ruta por defecto</strong> en R1 que diga: "todo lo que no conozco, mándalo por mi enlace al ISP". Y luego propagar esa ruta a R2 y R3 por OSPF.</p>
+
+  <h3>Teoría: ruta por defecto</h3>
+  <div class="callout theory">
+    La ruta <code>0.0.0.0/0</code> significa "cualquier destino". Cuando un router recibe un paquete y no encuentra una coincidencia más específica en su tabla, usa la ruta por defecto. Es la "puerta trasera" para todo lo desconocido — típicamente apunta hacia Internet.
+  </div>
+
+  <h3>Paso a — Crear la ruta por defecto en R1</h3>
+  <pre><span class="prompt">R1#</span> configure terminal
+<span class="prompt">R1(config)#</span> ip route 0.0.0.0 0.0.0.0 Serial0/0/1
+<span class="prompt">R1(config)#</span> end
+<span class="prompt">R1#</span> copy running-config startup-config</pre>
+  <p>Lectura: "para cualquier red (<code>0.0.0.0 0.0.0.0</code>), sal por la interfaz <code>Serial0/0/1</code> (la que va al ISP)".</p>
+  <div class="callout tip">También se puede escribir como <code>ip route 0.0.0.0 0.0.0.0 200.21.17.2</code> (apuntando a la IP del ISP). Ambas son válidas, pero usar la interfaz directa <code>S0/0/1</code> es lo que pide la guía.</div>
+
+  <h3>Verificar en R1</h3>
+  <pre><span class="prompt">R1#</span> show ip route</pre>
+  <p>Busca una línea así arriba del todo:</p>
+  <pre><span class="comment">Gateway of last resort is 0.0.0.0 to network 0.0.0.0
+S*   0.0.0.0/0 is directly connected, Serial0/0/1</span></pre>
+
+  <h3>Probar el ping al servidor desde R1</h3>
+  <pre><span class="prompt">R1#</span> ping 64.100.0.10</pre>
+  <p>Debe responder. Si responde, la ruta por defecto funciona.</p>
+
+  <h3>Paso b — Redistribuir la ruta por defecto a R2 y R3</h3>
+  <p>R2 y R3 NO conocen la ruta por defecto todavía. Necesitamos que R1 se las anuncie por OSPF.</p>
+  <pre><span class="prompt">R1(config)#</span> router ospf 1
+<span class="prompt">R1(config-router)#</span> default-information originate
+<span class="prompt">R1(config-router)#</span> end
+<span class="prompt">R1#</span> copy running-config startup-config</pre>
+  <p>El comando <code>default-information originate</code> le dice a OSPF: "tengo una ruta por defecto, cuéntasela a todos los vecinos".</p>
+
+  <h3>Verificar en R2 y R3</h3>
+  <pre><span class="prompt">R2#</span> show ip route</pre>
+  <p>Debe aparecer:</p>
+  <pre><span class="comment">O*E2 0.0.0.0/0 [110/1] via 192.168.2.1, 00:00:15, Serial0/0/0</span></pre>
+  <ul>
+    <li><code>O*E2</code>: ruta externa OSPF tipo 2, candidata a default. Eso confirma que la redistribución funcionó.</li>
+    <li>El siguiente salto es <code>192.168.2.1</code> (R1).</li>
+  </ul>
+
+  <h3>Prueba final: ping desde PC3 al servidor</h3>
+  <ol>
+    <li>Clic en PC3 → <code>Desktop → Command Prompt</code>.</li>
+    <li>Teclea: <code>ping 64.100.0.10</code></li>
+    <li>Debe responder con TTL.</li>
+  </ol>
+  <div class="callout warn">Si el primer ping da "timeout" pero los siguientes responden, es normal — ARP se tarda en resolver. Cuenta como éxito.</div>
+
+  <div class="callout dont">No agregues rutas estáticas en R2 y R3 hacia 64.100.0.0. Eso "funcionaría" pero no es lo que pide el parcial. La calificación quiere que uses <code>default-information originate</code>.</div>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Módulo 6</h4>
+    <label><input type="checkbox" data-check="m6-1"> Ruta por defecto creada en R1</label>
+    <label><input type="checkbox" data-check="m6-2"> show ip route en R1 muestra S* 0.0.0.0/0</label>
+    <label><input type="checkbox" data-check="m6-3"> default-information originate ejecutado en OSPF de R1</label>
+    <label><input type="checkbox" data-check="m6-4"> show ip route en R2 y R3 muestra O*E2 0.0.0.0/0</label>
+    <label><input type="checkbox" data-check="m6-5"> Ping desde PC3 a 64.100.0.10 responde</label>
+    <button class="module-complete-btn" data-complete="6">Marcar módulo completado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="5">← Anterior</button>
+    <button data-goto="7">Siguiente: Verificación →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 7 ============== -->
+<section class="module" data-module="7">
+  <h2>Módulo 7 — Parte 5: Verificación y pruebas <span class="badge">5 pts</span></h2>
+  <p>Aquí demuestras que todo funciona. Es la parte de pocos puntos pero la que el profesor mira primero. Si esto falla, los 60 puntos anteriores se ven mal.</p>
+
+  <h3>Paso 1 — Mostrar tablas de routing</h3>
+
+  <h4>En R1</h4>
+  <pre><span class="prompt">R1#</span> show ip route</pre>
+  <p>Debes ver (lo importante en negrita):</p>
+  <table>
+    <tr><th>Código</th><th>Red</th><th>Significa</th></tr>
+    <tr><td>C / L</td><td>192.168.1.0/24</td><td>LAN de R1 (conectada)</td></tr>
+    <tr><td>C / L</td><td>192.168.2.0/30</td><td>Enlace a R2 (conectada)</td></tr>
+    <tr><td>C / L</td><td>200.21.17.0/30</td><td>Enlace al ISP (conectada)</td></tr>
+    <tr><td>O</td><td>192.168.3.0/24</td><td>LAN de R2 (aprendida por OSPF)</td></tr>
+    <tr><td>O</td><td>192.168.2.128/30</td><td>Enlace R2-R3 (aprendida por OSPF)</td></tr>
+    <tr><td>O</td><td>192.168.4.0/24</td><td>LAN de R3 (aprendida por OSPF)</td></tr>
+    <tr><td>S*</td><td>0.0.0.0/0</td><td>Ruta por defecto al ISP</td></tr>
+  </table>
+
+  <h4>En R2</h4>
+  <p>Debes ver: 192.168.1.0 (O), 192.168.4.0 (O), sus propias conectadas, y la ruta default como <code>O*E2 0.0.0.0/0</code>.</p>
+
+  <h4>En R3</h4>
+  <p>Debes ver: 192.168.1.0 (O), 192.168.2.0 (O), 192.168.3.0 (O), sus conectadas, y default <code>O*E2 0.0.0.0/0</code>.</p>
+
+  <h3>Paso 2 — Pruebas de conectividad (matriz de pings)</h3>
+  <p>Debe responder TODO. Si algo falla, revisa el checklist de diagnóstico más abajo.</p>
+  <table>
+    <tr><th>Desde</th><th>Hacia</th><th>Comando</th></tr>
+    <tr><td>PC1</td><td>PC2</td><td><code>ping 192.168.3.10</code></td></tr>
+    <tr><td>PC1</td><td>PC3</td><td><code>ping 192.168.4.10</code></td></tr>
+    <tr><td>PC1</td><td>Servidor</td><td><code>ping 64.100.0.10</code></td></tr>
+    <tr><td>PC2</td><td>PC1</td><td><code>ping 192.168.1.10</code></td></tr>
+    <tr><td>PC2</td><td>PC3</td><td><code>ping 192.168.4.10</code></td></tr>
+    <tr><td>PC2</td><td>Servidor</td><td><code>ping 64.100.0.10</code></td></tr>
+    <tr><td>PC3</td><td>PC1</td><td><code>ping 192.168.1.10</code></td></tr>
+    <tr><td>PC3</td><td>PC2</td><td><code>ping 192.168.3.10</code></td></tr>
+    <tr><td>PC3</td><td>Servidor</td><td><code>ping 64.100.0.10</code></td></tr>
+  </table>
+  <p>Bonus: desde cualquier PC, abre <code>Desktop → Web Browser</code>, escribe <code>http://64.100.0.10</code> y debe cargar la página por defecto del servidor Cisco.</p>
+
+  <h3>Checklist de diagnóstico cuando algo no funciona</h3>
+  <div class="callout warn">
+    <strong>Ping falla entre PCs de redes distintas:</strong>
+    <ol>
+      <li><code>show ip interface brief</code> en todos los routers → ¿todas las interfaces up/up?</li>
+      <li><code>show ip ospf neighbor</code> → ¿se ven todos los vecinos en FULL?</li>
+      <li><code>show ip route</code> → ¿están todas las rutas O?</li>
+      <li><code>show running-config | section router ospf</code> → ¿wildcards correctas?</li>
+      <li>En las PCs: ¿gateway correcto?</li>
+    </ol>
+  </div>
+  <div class="callout warn">
+    <strong>Ping a 64.100.0.10 falla pero entre PCs sí funciona:</strong>
+    <ol>
+      <li>En R1: <code>show ip route</code> → ¿está la <code>S* 0.0.0.0/0</code>?</li>
+      <li>En R2/R3: <code>show ip route</code> → ¿está la <code>O*E2 0.0.0.0/0</code>?</li>
+      <li>Si no está: en R1 <code>show running-config | section router ospf</code> → ¿aparece <code>default-information originate</code>?</li>
+      <li>En ISP: ¿están up las interfaces? ¿Tiene su lado de la 200.21.17.0/30 bien configurado?</li>
+    </ol>
+  </div>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Módulo 7</h4>
+    <label><input type="checkbox" data-check="m7-1"> show ip route en R1 muestra C, L, O y S* completos</label>
+    <label><input type="checkbox" data-check="m7-2"> show ip route en R2 y R3 muestra todas las redes</label>
+    <label><input type="checkbox" data-check="m7-3"> Matriz de pings 100% exitosa</label>
+    <label><input type="checkbox" data-check="m7-4"> Navegador web carga http://64.100.0.10</label>
+    <button class="module-complete-btn" data-complete="7">Marcar módulo completado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="6">← Anterior</button>
+    <button data-goto="9">Siguiente: ACL →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 8 ============== -->
+<section class="module" data-module="8">
+  <h2>Módulo 9 — Cierre del parcial <span class="badge">Entrega</span></h2>
+  <p>Antes de entregar, hagamos un repaso rápido y un checklist final.</p>
+
+  <h3>Hoja de comandos clave (cheatsheet)</h3>
+
+  <h4>Configuración básica</h4>
+  <pre>enable
+configure terminal
+hostname X
+no ip domain-lookup
+enable secret cisco123
+service password-encryption
+line console 0
+ password class123
+ login
+line vty 0 4
+ password class123
+ login
+banner motd #...#</pre>
+
+  <h4>Configurar interfaz</h4>
+  <pre>interface G0/0
+ ip address &lt;ip&gt; &lt;mascara&gt;
+ no shutdown
+interface S0/0/0
+ ip address &lt;ip&gt; &lt;mascara&gt;
+ clock rate 64000     <span class="comment">! solo lado DCE</span>
+ no shutdown</pre>
+
+  <h4>OSPF</h4>
+  <pre>router ospf 1
+ router-id X.X.X.X
+ network &lt;red&gt; &lt;wildcard&gt; area 0
+ passive-interface G0/0
+ default-information originate   <span class="comment">! solo en R1</span></pre>
+
+  <h4>Ruta por defecto (solo R1)</h4>
+  <pre>ip route 0.0.0.0 0.0.0.0 S0/0/1</pre>
+
+  <h4>Verificación</h4>
+  <pre>show ip interface brief
+show ip route
+show ip ospf neighbor
+show ip protocols
+show running-config</pre>
+
+  <h4>ACL estándar (numerada)</h4>
+  <pre>access-list 10 deny &lt;ip&gt; &lt;wildcard&gt;
+access-list 10 permit any
+interface &lt;int&gt;
+ ip access-group 10 out          <span class="comment">! cerca del destino</span></pre>
+
+  <h4>ACL extendida (numerada)</h4>
+  <pre>access-list 110 permit tcp &lt;origen&gt; &lt;wc&gt; host &lt;destino&gt; eq 80
+access-list 110 deny ip &lt;origen&gt; &lt;wc&gt; host &lt;destino&gt;
+access-list 110 permit ip any any
+interface &lt;int&gt;
+ ip access-group 110 in          <span class="comment">! cerca del origen</span></pre>
+
+  <h4>ACL nombrada</h4>
+  <pre>ip access-list extended NOMBRE
+ deny icmp &lt;red&gt; &lt;wc&gt; any
+ permit ip any any
+interface &lt;int&gt;
+ ip access-group NOMBRE in</pre>
+
+  <h4>Verificar ACL</h4>
+  <pre>show access-lists
+show ip interface &lt;int&gt;
+show running-config | section access-list</pre>
+
+  <h4>Guardar</h4>
+  <pre>copy running-config startup-config</pre>
+
+  <h3>Errores típicos que pierden puntos</h3>
+  <ul>
+    <li>❌ Olvidar <code>no shutdown</code> en una interfaz.</li>
+    <li>❌ Wildcard mal escrita (poner <code>0.0.0.255</code> en una /30, debe ser <code>0.0.0.3</code>).</li>
+    <li>❌ No marcar las LAN como pasivas.</li>
+    <li>❌ Anunciar la red del ISP (200.21.17.0/30) en OSPF.</li>
+    <li>❌ Olvidar <code>default-information originate</code>.</li>
+    <li>❌ No guardar con <code>copy run start</code>.</li>
+    <li>❌ <code>clock rate</code> en el lado DTE en vez del DCE.</li>
+    <li>❌ Gateway de las PCs incorrecto.</li>
+  </ul>
+
+  <h3>Qué mostrar al profesor</h3>
+  <ol>
+    <li>El mapa de Packet Tracer con todo verde (sin luces rojas).</li>
+    <li><code>show ip ospf neighbor</code> en R1, R2 y R3 con vecinos en FULL.</li>
+    <li><code>show ip route</code> en R1, R2 y R3 con C, L, O y la ruta default.</li>
+    <li>Ping de PC1 → Servidor Web.</li>
+    <li>Ping de PC3 → Servidor Web.</li>
+    <li>Navegador en una PC abriendo <code>http://64.100.0.10</code>.</li>
+  </ol>
+
+  <div class="callout do">Antes de cerrar Packet Tracer: <code>copy run start</code> en TODOS los routers, luego <code>File → Save</code> (Ctrl+S). Si el profesor revisa tu .pkt después, todo debe estar guardado.</div>
+
+  <div class="checkpoint">
+    <h4>✓ Checklist final de entrega</h4>
+    <label><input type="checkbox" data-check="m8-1"> Todos los módulos anteriores completados (0-8)</label>
+    <label><input type="checkbox" data-check="m8-2"> copy run start ejecutado en R1, R2, R3, ISP</label>
+    <label><input type="checkbox" data-check="m8-3"> Archivo .pkt guardado (Ctrl+S)</label>
+    <label><input type="checkbox" data-check="m8-4"> Screenshots o capturas de show ip route y ospf neighbor listos</label>
+    <button class="module-complete-btn" data-complete="8">Marcar módulo completado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="9">← Anterior</button>
+    <button disabled>Fin de la guía 🎉</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 9 ============== -->
+<section class="module" data-module="9">
+  <h2>Módulo 8 — ACL (Access Control Lists) <span class="badge">Extra</span></h2>
+  <p>Esto NO es parte del parcial, pero te deja listo para el siguiente. Las ACL son la herramienta más usada para filtrar tráfico en routers Cisco.</p>
+
+  <h3>¿Qué es una ACL?</h3>
+  <div class="callout theory">
+    Una ACL es una <strong>lista ordenada de reglas</strong> que el router aplica a cada paquete que pasa por una interfaz. Cada regla dice "permitir X" o "denegar X". El router evalúa de arriba abajo y <strong>se queda con la primera que coincide</strong>. Al final de toda ACL hay un <strong>deny implícito</strong>: si nada coincide, se descarta.
+  </div>
+
+  <h3>Tipos de ACL</h3>
+  <table>
+    <tr><th>Tipo</th><th>Rango numérico</th><th>Qué filtra</th><th>Dónde se aplica</th></tr>
+    <tr><td>Estándar</td><td>1-99, 1300-1999</td><td>Solo IP origen</td><td>Cerca del destino</td></tr>
+    <tr><td>Extendida</td><td>100-199, 2000-2699</td><td>IP origen + destino + protocolo + puerto</td><td>Cerca del origen</td></tr>
+    <tr><td>Nombrada</td><td>Usa un nombre en vez de número</td><td>Cualquiera de los dos</td><td>Igual que su tipo</td></tr>
+  </table>
+
+  <h3>🔢 ¿Qué es el "rango numérico"?</h3>
+  <p>El número que le pones a la ACL es solo su <strong>nombre/identificador</strong>. Pero ese número no es libre: Cisco reservó rangos para cada tipo, y el router decide qué tipo de ACL es <em>por el número que usaste</em>.</p>
+
+  <table>
+    <tr><th>Rango</th><th>Tipo</th></tr>
+    <tr><td><strong>1 – 99</strong></td><td>Estándar (lo normal)</td></tr>
+    <tr><td><strong>100 – 199</strong></td><td>Extendida (lo normal)</td></tr>
+    <tr><td>1300 – 1999</td><td>Estándar (rango ampliado, casi no se usa)</td></tr>
+    <tr><td>2000 – 2699</td><td>Extendida (rango ampliado, casi no se usa)</td></tr>
+  </table>
+
+  <div class="callout theory">
+    Cuando escribes <code>access-list 10 ...</code> el router piensa: "10 está entre 1 y 99 → esto es estándar → solo me hablarás de origen".<br>
+    Cuando escribes <code>access-list 110 ...</code> piensa: "110 está entre 100 y 199 → esto es extendida → puedes darme origen, destino, protocolo y puerto".
+  </div>
+
+  <div class="callout dont">Si pones <code>access-list 10 permit tcp ... eq 80</code> el router te tira "Invalid input": una ACL estándar no entiende "tcp" ni "puerto". Tendrías que usar un número del rango 100-199.</div>
+
+  <div class="callout tip">Truco mental: <strong>número chiquito = portero chiquito</strong> (solo origen). <strong>Número grande = portero grande</strong> (todo). Para el parcial usa 10 o 20 para estándar, 100 o 110 para extendida.</div>
+
+  <h3>Regla de oro</h3>
+  <div class="callout warn">
+    <strong>Estándar → cerca del destino</strong> (solo conoce el origen, si la pones cerca del origen bloqueas todo el tráfico de esa IP a TODAS partes).<br>
+    <strong>Extendida → cerca del origen</strong> (ahorra ancho de banda: descartas el paquete antes de que viaje).
+  </div>
+
+  <h3>Dirección: in vs out</h3>
+  <ul>
+    <li><code>in</code>: filtra paquetes que <strong>entran</strong> al router por esa interfaz.</li>
+    <li><code>out</code>: filtra paquetes que <strong>salen</strong> del router por esa interfaz.</li>
+  </ul>
+  <p>Truco: párate sobre el router y piensa "¿el paquete viene hacia mí (in) o sale de mí (out)?".</p>
+
+  <h3>Caso 1 — ACL estándar: bloquear PC3 hacia servidor web</h3>
+  <p>Queremos que PC3 (192.168.4.10) NO pueda acceder al Servidor Web (64.100.0.10), pero el resto sí.</p>
+
+  <h4>Decisión: ¿dónde se pone?</h4>
+  <p>Estándar → cerca del destino. El servidor está detrás del ISP, pero el ISP no es nuestro. El router más cercano al destino que controlamos es <strong>R1</strong>, en la interfaz <code>S0/0/1</code> (salida al ISP), dirección <code>out</code>.</p>
+
+  <h4>Configuración</h4>
+  <pre><span class="prompt">R1(config)#</span> access-list 10 deny 192.168.4.10 0.0.0.0
+<span class="prompt">R1(config)#</span> access-list 10 permit any
+<span class="prompt">R1(config)#</span> interface Serial0/0/1
+<span class="prompt">R1(config-if)#</span> ip access-group 10 out</pre>
+  <ul>
+    <li><code>deny 192.168.4.10 0.0.0.0</code>: deniega exactamente esa IP (wildcard 0.0.0.0 = "esta IP exacta").</li>
+    <li><code>permit any</code>: ¡FUNDAMENTAL! Si no pones esto, el deny implícito bloquea TODO.</li>
+    <li><code>ip access-group 10 out</code>: aplica ACL 10 en dirección de salida.</li>
+  </ul>
+  <div class="callout dont">Olvidar el <code>permit any</code> al final es el error #1 de ACL. Sin él bloqueas todo Internet a toda tu red.</div>
+
+  <h3>Caso 2 — ACL extendida: solo HTTP al servidor</h3>
+  <p>Permitir HTTP (puerto 80) hacia el servidor desde cualquier PC, pero bloquear ping y todo lo demás.</p>
+
+  <h4>Decisión: ¿dónde?</h4>
+  <p>Extendida → cerca del origen. Como queremos esto desde varias PCs, ponerla cerca de cada origen sería trabajoso. La opción razonable: en R1 salida hacia el ISP (<code>S0/0/1 out</code>), porque ahí es donde podemos discriminar por destino y protocolo.</p>
+
+  <pre><span class="prompt">R1(config)#</span> access-list 110 permit tcp any host 64.100.0.10 eq 80
+<span class="prompt">R1(config)#</span> access-list 110 deny ip any host 64.100.0.10
+<span class="prompt">R1(config)#</span> access-list 110 permit ip any any
+<span class="prompt">R1(config)#</span> interface Serial0/0/1
+<span class="prompt">R1(config-if)#</span> ip access-group 110 out</pre>
+
+  <h3>Caso 3 — ACL nombrada: bloquear ping desde 192.168.3.0/24</h3>
+  <pre><span class="prompt">R2(config)#</span> ip access-list extended BLOQUEA_PING
+<span class="prompt">R2(config-ext-nacl)#</span> deny icmp 192.168.3.0 0.0.0.255 any
+<span class="prompt">R2(config-ext-nacl)#</span> permit ip any any
+<span class="prompt">R2(config-ext-nacl)#</span> exit
+<span class="prompt">R2(config)#</span> interface GigabitEthernet0/0
+<span class="prompt">R2(config-if)#</span> ip access-group BLOQUEA_PING in</pre>
+  <p>Aquí es <code>in</code> porque queremos bloquear los pings al ENTRAR al router desde la LAN de PC2.</p>
+
+  <h3>🟢 Ejemplo explicado LÍNEA POR LÍNEA — ACL estándar</h3>
+  <div class="callout theory">
+    <strong>Lo que quiero:</strong> que PC1 (192.168.1.10) NO pueda llegar al Servidor Web. Todos los demás sí.
+  </div>
+
+  <h4>Cómo pienso antes de teclear</h4>
+  <ul>
+    <li>¿Filtro solo origen? → Sí → <strong>estándar</strong>.</li>
+    <li>¿Dónde? → Estándar va <strong>cerca del destino</strong> → <strong>R1</strong>, interfaz <code>S0/0/1</code> (salida al ISP).</li>
+    <li>¿Dirección? → El paquete <strong>sale</strong> de R1 hacia el ISP → <code>out</code>.</li>
+  </ul>
+
+  <h4>Configuración completa</h4>
+  <pre><span class="prompt">R1></span> enable
+<span class="prompt">R1#</span> configure terminal
+<span class="prompt">R1(config)#</span> access-list 10 deny 192.168.1.10 0.0.0.0
+<span class="prompt">R1(config)#</span> access-list 10 permit any
+<span class="prompt">R1(config)#</span> interface Serial0/0/1
+<span class="prompt">R1(config-if)#</span> ip access-group 10 out
+<span class="prompt">R1(config-if)#</span> end
+<span class="prompt">R1#</span> copy running-config startup-config</pre>
+
+  <h4>Qué hace cada línea</h4>
+  <table>
+    <tr><th>Línea</th><th>Qué hace</th></tr>
+    <tr><td><code>enable</code></td><td>Entro al modo privilegiado (de mirar a poder hacer).</td></tr>
+    <tr><td><code>configure terminal</code></td><td>Entro al modo de configuración global.</td></tr>
+    <tr><td><code>access-list 10 deny 192.168.1.10 0.0.0.0</code></td><td><strong>Regla 1.</strong> <code>10</code> → número 1-99 → estándar. <code>deny</code> → "no pasa". <code>192.168.1.10</code> → la IP a bloquear. <code>0.0.0.0</code> → wildcard "esta IP exacta, ni una más".</td></tr>
+    <tr><td><code>access-list 10 permit any</code></td><td><strong>Regla 2.</strong> "Todos los demás SÍ pasan". Sin esto el deny implícito bloquearía TODO. ⚠️</td></tr>
+    <tr><td><code>interface Serial0/0/1</code></td><td>Entro a configurar la interfaz que conecta R1 con el ISP.</td></tr>
+    <tr><td><code>ip access-group 10 out</code></td><td><strong>Aplico la ACL.</strong> <code>10</code> → cuál uso. <code>out</code> → filtra paquetes que SALEN por aquí.</td></tr>
+    <tr><td><code>end</code></td><td>Vuelvo al modo privilegiado.</td></tr>
+    <tr><td><code>copy running-config startup-config</code></td><td>Guardo para que no se pierda al reiniciar.</td></tr>
+  </table>
+
+  <h4>Cómo probar</h4>
+  <ul>
+    <li>Desde PC1: <code>ping 64.100.0.10</code> → <strong>Request timed out</strong> ✅ (la ACL funciona)</li>
+    <li>Desde PC2: <code>ping 64.100.0.10</code> → <strong>Reply</strong> ✅ (los demás sí pasan)</li>
+  </ul>
+
+  <h3>🔵 Ejemplo explicado LÍNEA POR LÍNEA — ACL extendida</h3>
+  <div class="callout theory">
+    <strong>Lo que quiero:</strong> que PC3 (192.168.4.10) SOLO pueda acceder al servidor web por HTTP (puerto 80), pero NO pueda hacerle ping. Las demás PCs no se ven afectadas.
+  </div>
+
+  <h4>Cómo pienso antes de teclear</h4>
+  <ul>
+    <li>¿Filtro por protocolo (HTTP vs ping)? → Sí → <strong>extendida</strong>.</li>
+    <li>¿Dónde? → Extendida va <strong>cerca del origen</strong> → <strong>R3</strong>, interfaz <code>G0/0</code> (LAN de PC3).</li>
+    <li>¿Dirección? → El paquete <strong>entra</strong> a R3 viniendo de PC3 → <code>in</code>.</li>
+  </ul>
+
+  <h4>Configuración completa</h4>
+  <pre><span class="prompt">R3></span> enable
+<span class="prompt">R3#</span> configure terminal
+<span class="prompt">R3(config)#</span> access-list 110 permit tcp host 192.168.4.10 host 64.100.0.10 eq 80
+<span class="prompt">R3(config)#</span> access-list 110 deny icmp host 192.168.4.10 host 64.100.0.10
+<span class="prompt">R3(config)#</span> access-list 110 permit ip any any
+<span class="prompt">R3(config)#</span> interface GigabitEthernet0/0
+<span class="prompt">R3(config-if)#</span> ip access-group 110 in
+<span class="prompt">R3(config-if)#</span> end
+<span class="prompt">R3#</span> copy running-config startup-config</pre>
+
+  <h4>Qué hace cada línea</h4>
+  <table>
+    <tr><th>Línea</th><th>Qué hace</th></tr>
+    <tr><td><code>enable</code></td><td>Modo privilegiado.</td></tr>
+    <tr><td><code>configure terminal</code></td><td>Modo de configuración global.</td></tr>
+    <tr><td><code>access-list 110 permit tcp host 192.168.4.10 host 64.100.0.10 eq 80</code></td><td><strong>Regla 1.</strong> <code>110</code> → número 100-199 → extendida. <code>permit</code> → "déjalo pasar". <code>tcp</code> → solo paquetes TCP (HTTP usa TCP). <code>host 192.168.4.10</code> → desde esta IP exacta. <code>host 64.100.0.10</code> → hacia esta IP exacta. <code>eq 80</code> → puerto destino 80 (HTTP). Traducción: "deja pasar el tráfico web de PC3 al servidor".</td></tr>
+    <tr><td><code>access-list 110 deny icmp host 192.168.4.10 host 64.100.0.10</code></td><td><strong>Regla 2.</strong> <code>icmp</code> → el ping usa ICMP. Traducción: "bloquea los pings de PC3 al servidor".</td></tr>
+    <tr><td><code>access-list 110 permit ip any any</code></td><td><strong>Regla 3 (¡clave!).</strong> <code>ip</code> → cualquier protocolo. <code>any any</code> → cualquier origen y destino. Traducción: "todo lo demás pasa normal". Sin esta línea el deny implícito mataría TODO.</td></tr>
+    <tr><td><code>interface GigabitEthernet0/0</code></td><td>Entro a configurar la interfaz LAN de R3.</td></tr>
+    <tr><td><code>ip access-group 110 in</code></td><td>Aplico la ACL 110 a los paquetes que ENTRAN por aquí.</td></tr>
+    <tr><td><code>end</code></td><td>Vuelvo al modo privilegiado.</td></tr>
+    <tr><td><code>copy running-config startup-config</code></td><td>Guardo.</td></tr>
+  </table>
+
+  <h4>Cómo probar desde PC3</h4>
+  <ul>
+    <li><code>ping 64.100.0.10</code> → <strong>Request timed out</strong> ✅ (ping bloqueado)</li>
+    <li>Navegador → <code>http://64.100.0.10</code> → <strong>carga la página</strong> ✅ (HTTP permitido)</li>
+    <li><code>ping 192.168.1.10</code> (a PC1) → <strong>Reply</strong> ✅ (otras redes no afectadas)</li>
+  </ul>
+
+  <h3>🆚 Comparación de los dos ejemplos</h3>
+  <table>
+    <tr><th></th><th>Estándar (Ej. 1)</th><th>Extendida (Ej. 2)</th></tr>
+    <tr><td>Número</td><td>10 (1–99)</td><td>110 (100–199)</td></tr>
+    <tr><td>Qué filtra</td><td>Solo origen</td><td>Origen + destino + protocolo + puerto</td></tr>
+    <tr><td>Dónde</td><td>Cerca del destino (R1)</td><td>Cerca del origen (R3)</td></tr>
+    <tr><td>Dirección</td><td><code>out</code></td><td><code>in</code></td></tr>
+    <tr><td>¿Distingue HTTP de ping?</td><td>❌ No</td><td>✅ Sí</td></tr>
+  </table>
+
+  <div class="callout warn">
+    <strong>Los 3 "siempre" que NUNCA debes olvidar:</strong>
+    <ol>
+      <li><strong>Siempre</strong> un <code>permit any</code> (o <code>permit ip any any</code> en extendidas) al final → para no romper el resto de la red.</li>
+      <li><strong>Siempre</strong> revisa el orden → el router lee de arriba abajo y la primera regla que coincide gana.</li>
+      <li><strong>Siempre</strong> aplica la ACL a una interfaz con <code>ip access-group</code> → si no, la ACL existe pero no hace nada (es como tener al portero contratado pero parado en su casa).</li>
+    </ol>
+  </div>
+
+  <h3>Verificar y depurar ACL</h3>
+  <pre><span class="prompt">R1#</span> show access-lists           <span class="comment">! Ver todas las ACL y sus contadores</span>
+<span class="prompt">R1#</span> show ip interface S0/0/1    <span class="comment">! Ver qué ACL tiene aplicada</span>
+<span class="prompt">R1#</span> show running-config | section access-list</pre>
+  <p>Los contadores muestran cuántos paquetes coincidieron con cada regla — útil para saber si tu ACL realmente está atrapando lo que crees.</p>
+
+  <h3>Editar una ACL sin romperla</h3>
+  <div class="callout tip">
+    Con ACL <strong>numeradas</strong> no puedes insertar reglas en medio — tienes que borrarla entera (<code>no access-list 10</code>) y rehacerla. Con ACL <strong>nombradas</strong>, cada regla tiene un número de secuencia (10, 20, 30...) y puedes insertar nuevas en medio. Por eso en producción se prefieren las nombradas.
+  </div>
+
+  <h3>Errores clásicos</h3>
+  <ul>
+    <li>❌ Olvidar el <code>permit any</code> final.</li>
+    <li>❌ Aplicar estándar cerca del origen (bloqueas más de lo que querías).</li>
+    <li>❌ Confundir <code>in</code> con <code>out</code>.</li>
+    <li>❌ Wildcard mal calculada.</li>
+    <li>❌ Aplicar dos ACL en la misma interfaz y dirección (solo una se aplica).</li>
+    <li>❌ Probar ACL con ping cuando bloqueaste solo TCP — el ping (ICMP) pasa y crees que tu ACL falló.</li>
+  </ul>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Módulo 9</h4>
+    <label><input type="checkbox" data-check="m9-1"> Entiendo deny implícito y orden de evaluación</label>
+    <label><input type="checkbox" data-check="m9-2"> Sé cuándo usar estándar vs extendida</label>
+    <label><input type="checkbox" data-check="m9-3"> Sé cuándo usar in vs out</label>
+    <label><input type="checkbox" data-check="m9-4"> Practiqué los 3 casos en mi topología</label>
+    <button class="module-complete-btn" data-complete="9">Marcar módulo completado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="7">← Anterior</button>
+    <button data-goto="8">Siguiente: Cierre →</button>
+  </div>
+</section>
+
+</main>
+
+<script>
+  const modules = document.querySelectorAll('.module')
+  const navLinks = document.querySelectorAll('nav a[data-module]')
+  const STORAGE_KEY = 'ospf_progress_v1'
+
+  function loadProgress() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {checks:{}, completed:{}} }
+    catch { return {checks:{}, completed:{}} }
+  }
+  function saveProgress(p) { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)) }
+
+  let progress = loadProgress()
+
+  function showModule(idx) {
+    modules.forEach(m => m.classList.remove('active'))
+    navLinks.forEach(a => a.classList.remove('active'))
+    const target = document.querySelector(`.module[data-module="${idx}"]`)
+    const link = document.querySelector(`nav a[data-module="${idx}"]`)
+    if (target) target.classList.add('active')
+    if (link) link.classList.add('active')
+    window.scrollTo(0, 0)
+    document.querySelector('aside').classList.remove('open')
+  }
+
+  navLinks.forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault()
+      showModule(a.dataset.module)
+    })
+  })
+
+  document.querySelectorAll('[data-goto]').forEach(b => {
+    b.addEventListener('click', () => showModule(b.dataset.goto))
+  })
+
+  // Checkboxes
+  document.querySelectorAll('input[type="checkbox"][data-check]').forEach(cb => {
+    const key = cb.dataset.check
+    if (progress.checks[key]) {
+      cb.checked = true
+      cb.parentElement.classList.add('checked')
+    }
+    cb.addEventListener('change', () => {
+      progress.checks[key] = cb.checked
+      cb.parentElement.classList.toggle('checked', cb.checked)
+      saveProgress(progress)
+    })
+  })
+
+  // Module complete buttons
+  document.querySelectorAll('[data-complete]').forEach(btn => {
+    const mod = btn.dataset.complete
+    if (progress.completed[mod]) {
+      btn.classList.add('done')
+      btn.textContent = '✓ Módulo completado'
+    }
+    btn.addEventListener('click', () => {
+      progress.completed[mod] = !progress.completed[mod]
+      if (progress.completed[mod]) {
+        btn.classList.add('done')
+        btn.textContent = '✓ Módulo completado'
+      } else {
+        btn.classList.remove('done')
+        btn.textContent = 'Marcar módulo completado'
+      }
+      saveProgress(progress)
+      updateProgressUI()
+    })
+  })
+
+  function updateProgressUI() {
+    const total = 10
+    const done = Object.values(progress.completed).filter(Boolean).length
+    const pct = (done / total) * 100
+    document.getElementById('progressFill').style.width = pct + '%'
+    document.getElementById('progressText').textContent = `${done} / ${total} módulos completados`
+    navLinks.forEach(a => {
+      const idx = a.dataset.module
+      const span = a.querySelector('span')
+      if (progress.completed[idx]) {
+        span.className = 'check'
+        span.textContent = '✓'
+      } else {
+        span.className = 'pending'
+        span.textContent = '○'
+      }
+    })
+  }
+  updateProgressUI()
+
+  // Copy buttons on <pre>
+  document.querySelectorAll('pre').forEach(pre => {
+    const btn = document.createElement('button')
+    btn.className = 'copy-btn'
+    btn.textContent = 'Copiar'
+    btn.addEventListener('click', () => {
+      const text = pre.innerText.replace(/^Copiar\n/, '').replace(/^R[0-9I]?[A-Z]*[#>]\s?|^Router[#>]\s?|^ISP[(\w-)]*[#>]\s?/gm, '')
+      navigator.clipboard.writeText(text)
+      btn.textContent = '¡Copiado!'
+      btn.classList.add('copied')
+      setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied') }, 1500)
+    })
+    pre.appendChild(btn)
+  })
+
+  // Show first module by default
+  showModule(0)
+</script>
+
+</body>
+</html>

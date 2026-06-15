@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temas del parcial — Guía detallada de estudio</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --bg-2: #161b22;
+    --bg-3: #1c232c;
+    --border: #2a3340;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --accent: #4493f8;
+    --accent-2: #2f81f7;
+    --green: #3fb950;
+    --red: #f85149;
+    --yellow: #d29922;
+    --purple: #bc8cff;
+    --orange: #ffa657;
+    --code-bg: #0d1117;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    display: flex;
+    min-height: 100vh;
+  }
+  aside {
+    width: 320px;
+    background: var(--bg-2);
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    top: 0; left: 0;
+  }
+  aside h1 {
+    font-size: 16px;
+    padding: 0 20px 16px;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+  }
+  aside h1 small { display:block; color: var(--text-dim); font-weight: normal; font-size: 12px; margin-top: 4px;}
+  .progress-bar { margin: 12px 20px; height: 6px; background: var(--bg-3); border-radius: 3px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--accent)); width: 0%; transition: width 0.3s; }
+  .progress-text { text-align: center; font-size: 12px; color: var(--text-dim); margin-bottom: 16px; }
+  nav ul { list-style: none; }
+  nav a {
+    display: block;
+    padding: 10px 20px;
+    color: var(--text-dim);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    font-size: 13.5px;
+    transition: all 0.2s;
+  }
+  nav a:hover { background: var(--bg-3); color: var(--text); }
+  nav a.active { color: var(--accent); border-left-color: var(--accent); background: var(--bg-3); }
+  nav a .check { color: var(--green); margin-right: 6px; }
+  nav a .pending { color: var(--text-dim); margin-right: 6px; opacity: 0.4; }
+  .back-link {
+    display: block;
+    margin: 16px 20px;
+    padding: 8px 12px;
+    background: var(--bg-3);
+    color: var(--accent);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .back-link:hover { background: var(--accent); color: white; }
+
+  main {
+    margin-left: 320px;
+    padding: 40px 60px;
+    max-width: 1100px;
+    width: calc(100% - 320px);
+  }
+  .module { display: none; animation: fade 0.3s; }
+  .module.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: none;} }
+
+  h2 {
+    color: var(--accent);
+    font-size: 28px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+  }
+  h2 .badge { font-size: 12px; background: var(--accent); color: white; padding: 4px 8px; border-radius: 12px; vertical-align: middle; margin-left: 8px; }
+  h3 {
+    color: var(--purple);
+    font-size: 20px;
+    margin: 28px 0 12px;
+    padding-left: 12px;
+    border-left: 4px solid var(--purple);
+  }
+  h4 { color: var(--text); font-size: 16px; margin: 20px 0 8px; }
+  p { margin-bottom: 12px; }
+  ul, ol { margin: 8px 0 16px 24px; }
+  li { margin-bottom: 6px; }
+  strong { color: var(--yellow); }
+  em { color: var(--accent); font-style: normal; font-weight: 500; }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    font-family: "Consolas", "Monaco", monospace;
+    font-size: 13px;
+    position: relative;
+  }
+  pre code { color: #79c0ff; }
+  pre .comment { color: #6e7681; font-style: italic; }
+  pre .prompt { color: var(--green); user-select: none; }
+  code:not(pre code) {
+    background: var(--bg-3);
+    color: var(--orange);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-family: "Consolas", monospace;
+  }
+
+  .callout {
+    border-left: 4px solid;
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 6px 6px 0;
+    background: var(--bg-2);
+  }
+  .callout.do { border-color: var(--green); }
+  .callout.do::before { content: "✅ RECUERDA: "; color: var(--green); font-weight: bold; }
+  .callout.dont { border-color: var(--red); }
+  .callout.dont::before { content: "❌ OJO: "; color: var(--red); font-weight: bold; }
+  .callout.warn { border-color: var(--yellow); }
+  .callout.warn::before { content: "⚠️ IMPORTANTE: "; color: var(--yellow); font-weight: bold; }
+  .callout.tip { border-color: var(--accent); }
+  .callout.tip::before { content: "💡 TIP: "; color: var(--accent); font-weight: bold; }
+  .callout.theory { border-color: var(--purple); background: rgba(188,140,255,0.05); }
+  .callout.theory::before { content: "📘 CONCEPTO: "; color: var(--purple); font-weight: bold; }
+  .callout.example { border-color: var(--orange); }
+  .callout.example::before { content: "🔍 EJEMPLO: "; color: var(--orange); font-weight: bold; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    background: var(--bg-2);
+    border-radius: 6px;
+    overflow: hidden;
+    font-size: 14px;
+  }
+  th, td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th { background: var(--bg-3); color: var(--accent); font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg-3); }
+
+  .checkpoint {
+    background: linear-gradient(135deg, rgba(63,185,80,0.1), rgba(68,147,248,0.1));
+    border: 1px solid var(--green);
+    border-radius: 8px;
+    padding: 18px;
+    margin: 24px 0;
+  }
+  .checkpoint h4 { color: var(--green); margin-top: 0; }
+  .checkpoint label { display: block; padding: 6px 0; cursor: pointer; user-select: none; }
+  .checkpoint input[type="checkbox"] { margin-right: 10px; accent-color: var(--green); cursor: pointer; transform: scale(1.2); }
+  .checkpoint label.checked { color: var(--text-dim); text-decoration: line-through; }
+
+  .module-complete-btn {
+    background: var(--green);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 16px;
+  }
+  .module-complete-btn.done { background: var(--bg-3); color: var(--text-dim); }
+
+  .module-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .module-nav button {
+    background: var(--bg-3);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .module-nav button:hover { background: var(--accent); border-color: var(--accent); }
+  .module-nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  details { background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; padding: 12px 16px; margin: 10px 0; }
+  details summary { cursor: pointer; color: var(--accent); font-weight: 600; user-select: none; }
+  details[open] summary { margin-bottom: 10px; }
+
+  .layer-stack {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+  .layer-stack .layer {
+    background: var(--bg-3);
+    border-left: 4px solid var(--accent);
+    padding: 10px 14px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .layer-stack .layer .num { background: var(--accent); color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; }
+  .layer-stack .layer .name { font-weight: 600; flex: 1; margin-left: 14px; }
+  .layer-stack .layer .pdu { color: var(--orange); font-size: 13px; }
+
+  @media (max-width: 900px) {
+    aside { transform: translateX(-100%); transition: transform 0.3s; z-index: 100; }
+    aside.open { transform: translateX(0); }
+    main { margin-left: 0; padding: 20px; width: 100%; }
+    .menu-toggle { display: block; position: fixed; top: 12px; right: 12px; z-index: 101; background: var(--accent); color: white; border: none; padding: 10px 14px; border-radius: 6px; cursor: pointer; }
+  }
+  .menu-toggle { display: none; }
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="document.querySelector('aside').classList.toggle('open')">☰ Menú</button>
+
+<aside>
+  <h1>📚 Temas del parcial
+    <small>Guía detallada de estudio</small>
+  </h1>
+  <a href="index.html" class="back-link">← Ir a la guía OSPF + ACL</a>
+  <div class="progress-bar"><div class="progress-bar-fill" id="progressFill"></div></div>
+  <div class="progress-text" id="progressText">0 / 9 temas estudiados</div>
+  <nav>
+    <ul id="navList">
+      <li><a href="#" data-module="0"><span class="pending">○</span> 1. Tipos de Redes (LAN/WAN)</a></li>
+      <li><a href="#" data-module="1"><span class="pending">○</span> 2. Modelo OSI y TCP/IP</a></li>
+      <li><a href="#" data-module="2"><span class="pending">○</span> 3. Capa de Enlace de Datos</a></li>
+      <li><a href="#" data-module="3"><span class="pending">○</span> 4. Tecnología Ethernet</a></li>
+      <li><a href="#" data-module="4"><span class="pending">○</span> 5. Direccionamiento IP</a></li>
+      <li><a href="#" data-module="5"><span class="pending">○</span> 6. Capa de Red</a></li>
+      <li><a href="#" data-module="6"><span class="pending">○</span> 7. Algoritmos de Enrutamiento</a></li>
+      <li><a href="#" data-module="7"><span class="pending">○</span> 8. Enrutamiento Estático</a></li>
+      <li><a href="#" data-module="8"><span class="pending">○</span> 9. Configuración Básica Router</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<main>
+
+<!-- ============== MÓDULO 0: TIPOS DE REDES ============== -->
+<section class="module" data-module="0">
+  <h2>Tema 1 — Tipos de Redes <span class="badge">LAN / WAN</span></h2>
+  <p>Las redes se clasifican según su tamaño geográfico, tecnología de transmisión y propósito. Este es el primer tema que sienta las bases para todo el curso.</p>
+
+  <h3>¿Qué es una red?</h3>
+  <div class="callout theory">
+    "Una red de computadoras se establece cuando dos o más computadoras <strong>autónomas</strong> se conectan entre sí de forma permanente para compartir recursos e intercambiar información."
+  </div>
+  <p>La palabra clave es <strong>autónomas</strong>: cada equipo funciona por sí solo, no depende del otro para encender o procesar. Por eso un mouse conectado al PC NO es una "red".</p>
+
+  <h3>Clasificación de las redes</h3>
+
+  <h4>Por su ámbito (tamaño geográfico)</h4>
+  <table>
+    <tr><th>Distancia</th><th>Ubicación</th><th>Tipo de red</th></tr>
+    <tr><td>1 m</td><td>Mismo sistema</td><td>Multiprocesador (no es red)</td></tr>
+    <tr><td>10 m – 1 km</td><td>Habitación / Edificio / Campus</td><td><strong>LAN</strong> (Local Area Network)</td></tr>
+    <tr><td>10 km</td><td>Ciudad</td><td><strong>MAN</strong> (Metropolitan) o WAN</td></tr>
+    <tr><td>100 km – 10.000 km</td><td>País / Continente / Planeta</td><td><strong>WAN</strong> (Wide Area Network)</td></tr>
+  </table>
+
+  <h4>Por su tecnología de transmisión</h4>
+  <ul>
+    <li><strong>Redes broadcast (multipunto):</strong> todos comparten el mismo medio. Cuando uno transmite, todos escuchan. Ej: Ethernet.</li>
+    <li><strong>Redes punto a punto:</strong> dos dispositivos comunicándose directamente sin compartir el medio con otros. Ej: enlace serial entre dos routers.</li>
+  </ul>
+
+  <h3>Redes LAN (Local Area Network)</h3>
+  <div class="callout theory">
+    Diseñadas desde el principio para <strong>transportar datos</strong> dentro de un área pequeña. El cableado es propiedad del usuario u organización.
+  </div>
+
+  <h4>Características</h4>
+  <ul>
+    <li>Generalmente broadcast (medio compartido).</li>
+    <li>Cableado propio del usuario.</li>
+    <li>Diseñadas inicialmente para datos.</li>
+    <li>Alta velocidad (Mbps a Gbps) y baja latencia.</li>
+  </ul>
+
+  <h4>Tecnologías LAN principales</h4>
+  <table>
+    <tr><th>Tecnología</th><th>Estándar</th><th>Velocidades</th></tr>
+    <tr><td>Ethernet</td><td>IEEE 802.3</td><td>1, 10, 100, 1000 Mbps</td></tr>
+    <tr><td>Token Ring</td><td>IEEE 802.5</td><td>1, 4, 16, 100 Mbps</td></tr>
+    <tr><td>FDDI</td><td>—</td><td>100 Mbps</td></tr>
+    <tr><td>Fibre Channel</td><td>—</td><td>100, 200, 400, 800 Mbps</td></tr>
+    <tr><td>Wi-Fi</td><td>IEEE 802.11</td><td>1, 2, 5.5, 11, 54, 108, 300, 600, 1300 Mbps</td></tr>
+  </table>
+
+  <h3>Topologías Físicas vs Lógicas</h3>
+  <div class="callout theory">
+    <strong>Topología Física:</strong> cómo están conectadas las computadoras al medio físico (cómo va el cable).<br>
+    <strong>Topología Lógica:</strong> cómo el computador accede al medio (quién transmite y cuándo).
+  </div>
+
+  <h4>Topologías físicas</h4>
+  <table>
+    <tr><th>Topología</th><th>Descripción</th><th>Ejemplo</th></tr>
+    <tr><td><strong>Bus</strong></td><td>Un solo "backbone" con todos los hosts conectados. Cada extremo debe terminarse.</td><td>10Base2</td></tr>
+    <tr><td><strong>Ring (anillo)</strong></td><td>No hay backbone. Cada host conectado directamente a sus vecinos formando un círculo.</td><td>IBM Token Ring</td></tr>
+    <tr><td><strong>Star (estrella)</strong></td><td>Todos los equipos conectados a un punto central (hub o switch).</td><td>10BaseTX</td></tr>
+    <tr><td><strong>Extended Star (estrella extendida)</strong></td><td>Conecta dos o más estrellas. Es la topología más usada en redes empresariales.</td><td>UFPS, edificios corporativos</td></tr>
+    <tr><td><strong>Hierarchical (jerárquica)</strong></td><td>Similar a estrella extendida pero un computador controla el tráfico, no un hub/switch.</td><td>Redes con servidor central</td></tr>
+    <tr><td><strong>Mesh (malla)</strong></td><td>Cada host tiene conexión directa con cada otro host. Alta redundancia.</td><td>Central Nuclear, redes críticas</td></tr>
+  </table>
+
+  <h4>Topologías lógicas</h4>
+  <ul>
+    <li><strong>Broadcast:</strong> cada host envía sus datos a todos. Acceso "first come, first serve". Ethernet trabaja así.</li>
+    <li><strong>Token Passing:</strong> el acceso al medio se controla con un "token" electrónico. El que tiene el token transmite. Evita colisiones.</li>
+  </ul>
+
+  <h3>Formas de envío</h3>
+  <table>
+    <tr><th>Tipo</th><th>Destinatarios</th><th>Ejemplo</th></tr>
+    <tr><td><strong>Unicast</strong></td><td>Un destinatario concreto</td><td>El más común. Cliente → servidor.</td></tr>
+    <tr><td><strong>Broadcast</strong></td><td>Todos los destinatarios de la red</td><td>Anunciar nuevos servicios. MAC FFFF.FFFF.FFFF</td></tr>
+    <tr><td><strong>Multicast</strong></td><td>Un grupo selecto</td><td>Videoconferencia, streaming a grupo</td></tr>
+    <tr><td><strong>Anycast</strong></td><td>Uno cualquiera de un conjunto</td><td>Servicios de alta disponibilidad</td></tr>
+  </table>
+
+  <h3>Redes WAN (Wide Area Network)</h3>
+  <div class="callout theory">
+    Utilizan <strong>medios telefónicos</strong> (diseñados inicialmente para voz). Son servicios contratados a operadoras (Claro, Movistar, ETB). Costos elevados, se diseñan optimizadamente.
+  </div>
+
+  <h4>Servicios de comunicación WAN</h4>
+  <ul>
+    <li><strong>Líneas dedicadas:</strong> enlace dedicado permanente con caudal reservado, se use o no.</li>
+    <li><strong>Conmutación de circuitos:</strong> conexión se establece cuando se necesita; caudal reservado mientras dura. Ej: PSTN, ISDN.</li>
+    <li><strong>Conmutación de paquetes:</strong> ancho de banda compartido entre varios usuarios. Tráfico multiplexado. Más eficiente. Ej: Frame Relay, ATM, MPLS.</li>
+  </ul>
+
+  <h4>Tecnologías WAN principales</h4>
+  <table>
+    <tr><th>Tecnología</th><th>Tipo</th><th>Característica</th></tr>
+    <tr><td>T1/T3, E1/E3</td><td>Líneas dedicadas</td><td>T1=1.544 Mbps (USA), E1=2.048 Mbps (Europa)</td></tr>
+    <tr><td>PSTN</td><td>Dialup, conmutación circuitos</td><td>Bajo costo, baja velocidad</td></tr>
+    <tr><td>ISDN</td><td>Conmutación circuitos digital</td><td>BRI (144 kbps), PRI (T1/E1)</td></tr>
+    <tr><td>Frame Relay</td><td>Conmutación paquetes</td><td>PVCs identificados por DLCI. Hasta 4 Mbps</td></tr>
+    <tr><td>ATM</td><td>Conmutación paquetes</td><td>Celdas fijas de 53 bytes. Voz, video, datos</td></tr>
+    <tr><td>MPLS</td><td>Conmutación etiquetas</td><td>Multiprotocolo, alto rendimiento. Reemplaza Frame Relay/ATM</td></tr>
+    <tr><td>Metro Ethernet</td><td>WAN Ethernet</td><td>Fibra óptica. Reemplaza enlaces tradicionales</td></tr>
+    <tr><td>DSL</td><td>Banda ancha</td><td>Líneas telefónicas de par trenzado</td></tr>
+    <tr><td>Cable Modem</td><td>Banda ancha</td><td>Red de TV por cable</td></tr>
+    <tr><td>VSAT</td><td>Satelital</td><td>WAN privada vía satélite. 35.786 km órbita</td></tr>
+    <tr><td>WiMAX</td><td>Inalámbrico</td><td>IEEE 802.16, microondas</td></tr>
+    <tr><td>3G/4G/LTE</td><td>Móvil celular</td><td>Acceso inalámbrico a Internet</td></tr>
+  </table>
+
+  <h3>Redes punto a punto: modos de transmisión</h3>
+  <ul>
+    <li><strong>Simplex:</strong> transmisión en un solo sentido. Ej: TV, radio.</li>
+    <li><strong>Half-duplex (semi-dúplex):</strong> ambos sentidos, pero no a la vez. Ej: radios walkie-talkie.</li>
+    <li><strong>Full-duplex (dúplex):</strong> transmisión simultánea en ambos sentidos. Ej: teléfono, Ethernet moderna.</li>
+  </ul>
+
+  <div class="callout do">Para el examen recuerda: LAN = transporte de datos diseñado para eso. WAN = adaptación de redes telefónicas (voz) para datos. La topología Ethernet es BROADCAST lógica aunque físicamente sea estrella.</div>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Tema 1</h4>
+    <label><input type="checkbox" data-check="t1-1"> Distingo LAN, MAN y WAN por su ámbito</label>
+    <label><input type="checkbox" data-check="t1-2"> Conozco las 6 topologías físicas principales</label>
+    <label><input type="checkbox" data-check="t1-3"> Diferencio topología física vs lógica</label>
+    <label><input type="checkbox" data-check="t1-4"> Conozco unicast, broadcast, multicast, anycast</label>
+    <label><input type="checkbox" data-check="t1-5"> Conozco las principales tecnologías WAN</label>
+    <button class="module-complete-btn" data-complete="0">Marcar tema estudiado</button>
+  </div>
+
+  <div class="module-nav">
+    <button disabled>← Anterior</button>
+    <button data-goto="1">Siguiente: Modelo OSI →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 1: MODELO OSI ============== -->
+<section class="module" data-module="1">
+  <h2>Tema 2 — Modelo OSI y Pila TCP/IP <span class="badge">Modelos de capas</span></h2>
+  <p>Todas las arquitecturas de red modernas se describen con modelos de capas. Los dos más importantes son <strong>OSI (7 capas)</strong> de ISO y <strong>TCP/IP (4 capas)</strong> de DARPA.</p>
+
+  <h3>Origen histórico</h3>
+  <ul>
+    <li><strong>ISO crea OSI en 1984</strong> — International Organization for Standardization → Open Systems Interconnection. Un modelo de referencia teórico.</li>
+    <li><strong>DARPA crea ARPANET</strong> como red de respaldo ante un ataque nuclear → de ahí nace TCP/IP, el modelo práctico que usa Internet hoy.</li>
+  </ul>
+
+  <h3>¿Por qué un modelo en capas?</h3>
+  <div class="callout theory">
+    Dividir el problema en capas:
+    <ul>
+      <li>Reduce la complejidad</li>
+      <li>Estandariza las interfaces</li>
+      <li>Facilita la ingeniería modular</li>
+      <li>Garantiza tecnología interoperable</li>
+      <li>Acelera la evolución</li>
+      <li>Simplifica la enseñanza y el aprendizaje</li>
+    </ul>
+  </div>
+
+  <h3>Principios del modelo de capas</h3>
+  <ul>
+    <li>La capa <em>n</em> ofrece sus servicios a la capa <em>n+1</em>. La capa <em>n+1</em> solo usa los servicios de la capa <em>n</em>.</li>
+    <li>La comunicación entre capas se realiza mediante una <strong>interfaz</strong>.</li>
+    <li>Cada capa se comunica con la capa equivalente en el otro sistema usando un <strong>protocolo</strong> característico de esa capa.</li>
+    <li>El protocolo forma parte de la arquitectura, la interfaz no.</li>
+  </ul>
+  <div class="callout example">
+    Como una traducción entre artistas: artista ruso ↔ traductor → inglés → traductor ↔ artista valenciano. Cada nivel habla su "idioma" (protocolo) con su par del otro lado.
+  </div>
+
+  <h3>Las 7 capas del modelo OSI</h3>
+  <div class="layer-stack">
+    <div class="layer"><span class="num">7</span><span class="name">Application (Aplicación)</span><span class="pdu">Data</span></div>
+    <div class="layer"><span class="num">6</span><span class="name">Presentation (Presentación)</span><span class="pdu">Data</span></div>
+    <div class="layer"><span class="num">5</span><span class="name">Session (Sesión)</span><span class="pdu">Data</span></div>
+    <div class="layer"><span class="num">4</span><span class="name">Transport (Transporte)</span><span class="pdu">Segments</span></div>
+    <div class="layer"><span class="num">3</span><span class="name">Network (Red)</span><span class="pdu">Packets</span></div>
+    <div class="layer"><span class="num">2</span><span class="name">Data Link (Enlace de Datos)</span><span class="pdu">Frames</span></div>
+    <div class="layer"><span class="num">1</span><span class="name">Physical (Física)</span><span class="pdu">Bits</span></div>
+  </div>
+
+  <div class="callout tip">
+    <strong>Mnemotécnico (de arriba a abajo):</strong> <em>"All People Seem To Need Data Processing"</em><br>
+    <strong>De abajo a arriba:</strong> <em>"Please Do Not Throw Sausage Pizza Away"</em>
+  </div>
+
+  <h3>Capas de Host vs Capas de Medio</h3>
+  <ul>
+    <li><strong>Capas de Hosts (4-7):</strong> Aplicación, Presentación, Sesión, Transporte. Proporcionan entrega precisa de datos entre computadores.</li>
+    <li><strong>Capas de Medios (1-3):</strong> Red, Enlace de Datos, Física. Controlan la entrega física de mensajes a través de la red.</li>
+  </ul>
+
+  <h3>Detalle por capa OSI</h3>
+
+  <h4>Capa 7 — Aplicación</h4>
+  <p>Provee los servicios de red a las aplicaciones del usuario. Permite que apps como Word "vean" los recursos de red.</p>
+  <p><strong>Protocolos:</strong> HTTP (80), FTP (20/21), SMTP (25), DNS (53), TFTP (69), POP3, Telnet (23), SNMP (161)</p>
+
+  <h4>Capa 6 — Presentación</h4>
+  <p>Representación de datos y formateo de códigos. Garantiza que los datos sean entendidos por la aplicación del otro lado.</p>
+  <p><strong>Funciones:</strong> Compresión, cifrado/encripción, formato de datos (ASCII, EBCDIC).</p>
+
+  <h4>Capa 5 — Sesión</h4>
+  <p>Establece, mantiene y termina sesiones entre hosts. Usa "dialog control" y "dialog separation".</p>
+  <p><strong>Protocolos:</strong> NFS, SQL, RPC, X-Window, ASP, SCP</p>
+
+  <h4>Capa 4 — Transporte</h4>
+  <p>Provee <strong>confiabilidad, control de flujo y corrección de errores</strong>. Segmenta datos, agrega headers con secuencia y confirmación. Maneja puertos origen/destino.</p>
+  <p><strong>Protocolos:</strong> TCP (orientado a conexión, confiable) y UDP (no orientado a conexión, poco confiable).</p>
+
+  <h4>Capa 3 — Red</h4>
+  <p>Responsable del <strong>direccionamiento lógico</strong> del paquete y la <strong>determinación de ruta</strong>.</p>
+  <ul>
+    <li><strong>Addressing</strong> → protocolos enrutados (IP, IPX, AppleTalk, DECnet)</li>
+    <li><strong>Path Selection</strong> → protocolos de enrutamiento (RIP, IGRP, EIGRP, OSPF, BGP)</li>
+  </ul>
+  <p><strong>Routers operan en esta capa.</strong></p>
+
+  <h4>Capa 2 — Enlace de Datos</h4>
+  <p>Provee <strong>acceso al medio</strong>. Maneja notificación de errores, topología de red, control de flujo y direccionamiento físico de la trama (frame).</p>
+  <p>Media Access Control vía:</p>
+  <ul>
+    <li><strong>Determinística</strong> — token passing (Token Ring, FDDI)</li>
+    <li><strong>No-determinística</strong> — broadcast topology, dominios de colisión (Ethernet/CSMA-CD)</li>
+  </ul>
+
+  <h4>Capa 1 — Física</h4>
+  <p>Proporciona los medios eléctricos, mecánicos, de procedimiento y funcionales para activar y mantener el enlace físico entre sistemas.</p>
+  <p><strong>Medios:</strong> Cable CAT 5, cable coaxial, fibra óptica, atmósfera (inalámbrico).</p>
+
+  <h3>Las 4 capas del modelo TCP/IP</h3>
+  <table>
+    <tr><th>Capa TCP/IP</th><th>Equivale a OSI</th><th>Función</th><th>Protocolos</th></tr>
+    <tr><td><strong>Application</strong></td><td>Aplicación + Presentación + Sesión (5-7)</td><td>Data representation, encryption, dialog control</td><td>FTP, HTTP, SMTP, DNS, TFTP</td></tr>
+    <tr><td><strong>Transport</strong></td><td>Transporte (4)</td><td>Reliability, flow control, error correction</td><td>TCP, UDP</td></tr>
+    <tr><td><strong>Internet</strong></td><td>Red (3)</td><td>Path determination, packet switching</td><td>IP</td></tr>
+    <tr><td><strong>Network Access</strong></td><td>Enlace + Física (1-2)</td><td>Procesos que aseguran que el paquete llegue. LAN/WAN tech</td><td>Ethernet, Frame Relay, 100BaseTX</td></tr>
+  </table>
+
+  <h3>TCP vs UDP</h3>
+  <table>
+    <tr><th>TCP</th><th>UDP</th></tr>
+    <tr><td>Orientado a conexión</td><td>No orientado a conexión</td></tr>
+    <tr><td>Confiable</td><td>Poco confiable</td></tr>
+    <tr><td>Divide mensajes en segmentos</td><td>Transmite datagramas</td></tr>
+    <tr><td>Reensambla en destino</td><td>No reensambla</td></tr>
+    <tr><td>Reenvía lo no recibido</td><td>No usa acuses de recibo</td></tr>
+    <tr><td>Control de flujo (windowing)</td><td>No proporciona control de flujo</td></tr>
+    <tr><td>Como carta certificada</td><td>Como carta estándar</td></tr>
+  </table>
+
+  <h3>Números de puerto</h3>
+  <table>
+    <tr><th>Rango</th><th>Uso</th></tr>
+    <tr><td>0 – 255</td><td>Aplicaciones públicas (well-known)</td></tr>
+    <tr><td>255 – 1023</td><td>Empresas, aplicaciones comerciales</td></tr>
+    <tr><td>1024+</td><td>No regulados / dinámicos</td></tr>
+  </table>
+
+  <table>
+    <tr><th>Protocolo</th><th>Puerto</th><th>Transporte</th></tr>
+    <tr><td>FTP</td><td>21</td><td>TCP</td></tr>
+    <tr><td>Telnet</td><td>23</td><td>TCP</td></tr>
+    <tr><td>SMTP</td><td>25</td><td>TCP</td></tr>
+    <tr><td>DNS</td><td>53</td><td>UDP (también TCP)</td></tr>
+    <tr><td>HTTP</td><td>80</td><td>TCP</td></tr>
+    <tr><td>POP3</td><td>110</td><td>TCP</td></tr>
+    <tr><td>HTTPS</td><td>443</td><td>TCP</td></tr>
+    <tr><td>TFTP</td><td>69</td><td>UDP</td></tr>
+    <tr><td>SNMP</td><td>161</td><td>UDP</td></tr>
+  </table>
+
+  <h3>Encapsulamiento</h3>
+  <div class="callout theory">
+    Cada capa añade su propio "encabezado" (header) a los datos. En el destino, cada capa quita su encabezado correspondiente.
+  </div>
+
+  <h4>PDUs (Protocol Data Units) por capa — <strong>D-S-P-F-B</strong></h4>
+  <table>
+    <tr><th>PDU</th><th>Capa</th></tr>
+    <tr><td><strong>D</strong>ata</td><td>5 – 7 (Aplicación/Presentación/Sesión)</td></tr>
+    <tr><td><strong>S</strong>egments</td><td>4 (Transporte)</td></tr>
+    <tr><td><strong>P</strong>ackets</td><td>3 (Red)</td></tr>
+    <tr><td><strong>F</strong>rames</td><td>2 (Enlace)</td></tr>
+    <tr><td><strong>B</strong>its</td><td>1 (Física)</td></tr>
+  </table>
+
+  <div class="callout example">
+    <strong>Envío de un email:</strong><br>
+    1. SMTP toma los datos → capa Presentación.<br>
+    2. Presentación los codifica en ASCII.<br>
+    3. Sesión establece conexión con destino.<br>
+    4. Transporte (TCP) los <strong>segmenta</strong>.<br>
+    5. Red (IP) los <strong>direcciona</strong> como paquetes.<br>
+    6. Enlace los encapsula en <strong>tramas</strong> con direcciones MAC.<br>
+    7. Física envía los <strong>bits</strong> hacia el cable.
+  </div>
+
+  <div class="callout warn">El examen suele preguntar: "¿En qué capa ocurre X?" Memorízate qué pasa en cada capa y los protocolos típicos. Recuerda: IP es Capa 3, TCP/UDP son Capa 4, HTTP/FTP/DNS son Capa 7.</div>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Tema 2</h4>
+    <label><input type="checkbox" data-check="t2-1"> Memorizo las 7 capas OSI en orden</label>
+    <label><input type="checkbox" data-check="t2-2"> Sé la equivalencia OSI ↔ TCP/IP</label>
+    <label><input type="checkbox" data-check="t2-3"> Conozco los protocolos principales de cada capa</label>
+    <label><input type="checkbox" data-check="t2-4"> Distingo TCP vs UDP</label>
+    <label><input type="checkbox" data-check="t2-5"> Sé los PDUs: Data, Segments, Packets, Frames, Bits</label>
+    <button class="module-complete-btn" data-complete="1">Marcar tema estudiado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="0">← Anterior</button>
+    <button data-goto="2">Siguiente: Capa de Enlace →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 2: CAPA DE ENLACE ============== -->
+<section class="module" data-module="2">
+  <h2>Tema 3 — Capa de Enlace de Datos <span class="badge">Capa 2 OSI</span></h2>
+  <p>La Capa 2 es donde los bits "crudos" se convierten en tramas con sentido. Es la frontera entre el mundo físico (cables, señales) y el mundo lógico (paquetes, IPs).</p>
+
+  <h3>¿Por qué existe la Capa 2?</h3>
+  <p>La Capa 1 (Física) tiene limitaciones serias:</p>
+  <ul>
+    <li>No puede organizar flujos de bits.</li>
+    <li>No puede nombrar o identificar computadoras.</li>
+    <li>No puede comunicarse con capas superiores.</li>
+    <li>No puede decidir qué computadora transmite.</li>
+  </ul>
+  <p>La Capa 2 resuelve todo esto.</p>
+
+  <h3>Funciones principales</h3>
+  <ul>
+    <li><strong>Framing:</strong> organiza los bits en grupos llamados tramas (frames).</li>
+    <li><strong>Addressing:</strong> identifica computadoras mediante direcciones (MAC).</li>
+    <li><strong>Logical Link Control (LLC):</strong> se comunica con las capas superiores.</li>
+    <li><strong>Media Access Control (MAC):</strong> decide quién transmite y cuándo.</li>
+  </ul>
+
+  <h3>Las dos sub-capas: LLC y MAC</h3>
+  <div class="callout theory">
+    La Capa 2 IEEE se divide en dos:
+    <ul>
+      <li><strong>LLC (802.2):</strong> Logical Link Control — interfaz con Capa 3, control de flujo y errores.</li>
+      <li><strong>MAC (802.3, 802.5...):</strong> Media Access Control — direccionamiento físico (MAC address) y acceso al medio.</li>
+    </ul>
+  </div>
+
+  <h3>Direcciones MAC</h3>
+  <ul>
+    <li>Identificador único de 48 bits (6 bytes) grabado en la tarjeta de red.</li>
+    <li>Formato hexadecimal: <code>00:1A:2B:3C:4D:5E</code> o <code>001A.2B3C.4D5E</code>.</li>
+    <li>Primeros 24 bits = <strong>OUI</strong> (Organizationally Unique Identifier, identifica al fabricante).</li>
+    <li>Últimos 24 bits = número de serie del dispositivo.</li>
+    <li>MAC de broadcast: <code>FF:FF:FF:FF:FF:FF</code> (todos los bits a 1).</li>
+  </ul>
+
+  <h3>Protocolos MAC: Determinístico vs No-determinístico</h3>
+
+  <h4>Determinístico — "Tomemos turnos"</h4>
+  <p>Cada estación espera su turno. Predecible, sin colisiones.</p>
+  <ul>
+    <li><strong>Token Ring</strong> (IEEE 802.5): un token circula entre estaciones. Solo el que tiene el token puede transmitir.</li>
+    <li><strong>FDDI:</strong> dos anillos de fibra. También usa token passing.</li>
+  </ul>
+
+  <h4>No-determinístico — "El primero que llegue, el primero servido"</h4>
+  <ul>
+    <li><strong>Ethernet (IEEE 802.3):</strong> usa <strong>CSMA/CD</strong> (Carrier Sense Multiple Access with Collision Detection).</li>
+  </ul>
+
+  <h3>CSMA/CD paso a paso</h3>
+  <div class="callout theory">
+    <strong>Carrier Sense:</strong> antes de transmitir, escucho el medio. ¿Hay alguien transmitiendo?<br>
+    <strong>Multiple Access:</strong> todos pueden acceder al medio.<br>
+    <strong>Collision Detection:</strong> mientras transmito, detecto si hubo colisión. Si sí, espero un tiempo aleatorio (backoff) y reintento.
+  </div>
+  <ol>
+    <li>Estación quiere transmitir → escucha el medio.</li>
+    <li>Si está libre → transmite.</li>
+    <li>Si dos transmiten a la vez → colisión.</li>
+    <li>Detectada la colisión → envían "jam signal" para que todos se enteren.</li>
+    <li>Esperan un tiempo aleatorio (backoff exponencial binario).</li>
+    <li>Reintentan.</li>
+  </ol>
+
+  <h3>Dominios de colisión vs dominios de broadcast</h3>
+  <table>
+    <tr><th>Dispositivo</th><th>Dominios de colisión</th><th>Dominios de broadcast</th></tr>
+    <tr><td>Hub</td><td>1 (todos comparten)</td><td>1</td></tr>
+    <tr><td>Switch</td><td>1 por puerto</td><td>1</td></tr>
+    <tr><td>Router</td><td>1 por puerto</td><td>1 por puerto</td></tr>
+  </table>
+
+  <h3>Formato general de una trama</h3>
+  <pre>+----------+----------+----------+--------+----------+--------+
+| Preamble | Dst MAC  | Src MAC  | Type   | Datos    | FCS    |
++----------+----------+----------+--------+----------+--------+</pre>
+  <ul>
+    <li><strong>Preamble:</strong> sincronización.</li>
+    <li><strong>Dst MAC / Src MAC:</strong> direcciones MAC destino y origen.</li>
+    <li><strong>Type:</strong> qué protocolo de capa superior se usa (IP, ARP, etc.).</li>
+    <li><strong>Datos:</strong> payload (el paquete IP).</li>
+    <li><strong>FCS (Frame Check Sequence):</strong> CRC para detectar errores.</li>
+  </ul>
+
+  <h3>Dispositivos de Capa 2</h3>
+  <ul>
+    <li><strong>NIC (tarjeta de red):</strong> donde está la MAC.</li>
+    <li><strong>Bridge:</strong> conecta dos segmentos. Decisión basada en MAC.</li>
+    <li><strong>Switch:</strong> "bridge multipuerto". Aprende MACs, crea tabla CAM, envía tramas solo al puerto destino.</li>
+  </ul>
+
+  <div class="callout warn">El examen suele preguntar: "¿Qué capa direcciona con MAC?" Respuesta: Capa 2. "¿Qué capa segmenta el medio en dominios de colisión separados?" Respuesta: Capa 2 (switches). "¿Qué capa hace lo mismo con broadcast?" Respuesta: Capa 3 (routers).</div>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Tema 3</h4>
+    <label><input type="checkbox" data-check="t3-1"> Entiendo las 4 funciones de Capa 2</label>
+    <label><input type="checkbox" data-check="t3-2"> Distingo LLC vs MAC</label>
+    <label><input type="checkbox" data-check="t3-3"> Conozco el formato de una MAC address</label>
+    <label><input type="checkbox" data-check="t3-4"> Entiendo CSMA/CD paso a paso</label>
+    <label><input type="checkbox" data-check="t3-5"> Distingo determinístico vs no-determinístico</label>
+    <button class="module-complete-btn" data-complete="2">Marcar tema estudiado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="1">← Anterior</button>
+    <button data-goto="3">Siguiente: Ethernet →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 3: ETHERNET ============== -->
+<section class="module" data-module="3">
+  <h2>Tema 4 — Tecnología Ethernet <span class="badge">IEEE 802.3</span></h2>
+  <p>Ethernet es la tecnología LAN más usada del mundo. Domina porque es barata, simple y escalable. Aquí está todo lo que necesitas saber.</p>
+
+  <h3>Historia y estándar</h3>
+  <ul>
+    <li>Desarrollada por Xerox PARC en los 70s (Robert Metcalfe, 1973).</li>
+    <li>Estandarizada como <strong>IEEE 802.3</strong> en 1983.</li>
+    <li>Topología lógica: <strong>broadcast</strong>. Topología física: bus (antiguo) o estrella (moderno).</li>
+    <li>Acceso al medio: <strong>CSMA/CD</strong>.</li>
+  </ul>
+
+  <h3>Evolución de Ethernet</h3>
+  <table>
+    <tr><th>Estándar</th><th>Velocidad</th><th>Medio</th><th>Distancia máx</th></tr>
+    <tr><td>10Base5 (Thicknet)</td><td>10 Mbps</td><td>Coaxial grueso</td><td>500 m</td></tr>
+    <tr><td>10Base2 (Thinnet)</td><td>10 Mbps</td><td>Coaxial delgado</td><td>185 m</td></tr>
+    <tr><td>10BaseT</td><td>10 Mbps</td><td>Par trenzado CAT3+</td><td>100 m</td></tr>
+    <tr><td>100BaseTX (Fast Ethernet)</td><td>100 Mbps</td><td>Par trenzado CAT5</td><td>100 m</td></tr>
+    <tr><td>100BaseFX</td><td>100 Mbps</td><td>Fibra óptica</td><td>2 km</td></tr>
+    <tr><td>1000BaseT (Gigabit)</td><td>1 Gbps</td><td>CAT5e/CAT6</td><td>100 m</td></tr>
+    <tr><td>1000BaseSX/LX</td><td>1 Gbps</td><td>Fibra</td><td>550 m / 5 km</td></tr>
+    <tr><td>10GBASE-T</td><td>10 Gbps</td><td>CAT6a/CAT7</td><td>100 m</td></tr>
+  </table>
+
+  <h3>Decodificando la nomenclatura</h3>
+  <div class="callout example">
+    <code>100BaseTX</code><br>
+    <strong>100</strong> = velocidad en Mbps<br>
+    <strong>Base</strong> = banda base (señal digital, sin modular)<br>
+    <strong>TX</strong> = tipo de medio (T = twisted pair, F = fiber)
+  </div>
+
+  <h3>Trama Ethernet (IEEE 802.3)</h3>
+  <pre>+----------+-----+----------+----------+--------+----------+--------+
+| Preamble | SFD | Dst MAC  | Src MAC  | Len/Tp | Datos    | FCS    |
+|  7 bytes | 1 B | 6 bytes  | 6 bytes  | 2 B    |46-1500 B | 4 B    |
++----------+-----+----------+----------+--------+----------+--------+</pre>
+  <ul>
+    <li><strong>Preamble (7 bytes):</strong> patrón <code>10101010</code> para sincronización.</li>
+    <li><strong>SFD (1 byte):</strong> Start Frame Delimiter, <code>10101011</code>. Marca dónde empieza la trama.</li>
+    <li><strong>Destination MAC (6 bytes):</strong> MAC destino.</li>
+    <li><strong>Source MAC (6 bytes):</strong> MAC origen.</li>
+    <li><strong>Length/Type (2 bytes):</strong> longitud o tipo de protocolo superior (0x0800 = IP).</li>
+    <li><strong>Datos (46-1500 bytes):</strong> payload. Si es menor a 46, se rellena con padding.</li>
+    <li><strong>FCS (4 bytes):</strong> Frame Check Sequence — CRC-32 para detectar errores.</li>
+  </ul>
+
+  <h3>MTU (Maximum Transmission Unit)</h3>
+  <p>El tamaño máximo de datos en una trama Ethernet estándar es <strong>1500 bytes</strong>. Esta es la MTU típica. Jumbo frames pueden llegar a 9000 bytes en redes que lo soporten.</p>
+
+  <h3>Dispositivos Ethernet</h3>
+  <table>
+    <tr><th>Dispositivo</th><th>Capa</th><th>Función</th></tr>
+    <tr><td>Repetidor</td><td>1</td><td>Regenera la señal eléctrica</td></tr>
+    <tr><td>Hub</td><td>1</td><td>Repetidor multipuerto. Todos los puertos comparten el mismo dominio de colisión</td></tr>
+    <tr><td>Bridge</td><td>2</td><td>Conecta dos segmentos. Aprende MACs</td></tr>
+    <tr><td>Switch</td><td>2</td><td>Bridge multipuerto. Un dominio de colisión por puerto</td></tr>
+    <tr><td>Router</td><td>3</td><td>Conecta redes diferentes</td></tr>
+  </table>
+
+  <h3>Cómo aprende un switch</h3>
+  <ol>
+    <li>Switch inicia con tabla MAC vacía.</li>
+    <li>Llega trama → mira MAC origen → la asocia al puerto por donde entró → la guarda en su tabla CAM.</li>
+    <li>Mira MAC destino → busca en su tabla.
+      <ul>
+        <li>Si encuentra el puerto → envía solo por ese puerto (<strong>forwarding</strong>).</li>
+        <li>Si NO la encuentra → envía por todos los puertos excepto el de origen (<strong>flooding</strong>).</li>
+      </ul>
+    </li>
+    <li>Si la MAC destino es broadcast (FFFF.FFFF.FFFF) → siempre flooding.</li>
+  </ol>
+
+  <h3>Tipos de transmisión en switch</h3>
+  <ul>
+    <li><strong>Store-and-forward:</strong> recibe la trama completa, verifica FCS, luego reenvía. Más seguro, más lento.</li>
+    <li><strong>Cut-through:</strong> apenas lee la MAC destino, reenvía. Más rápido, no verifica errores.</li>
+    <li><strong>Fragment-free:</strong> espera los primeros 64 bytes (donde suelen ocurrir colisiones), luego reenvía.</li>
+  </ul>
+
+  <h3>Half-duplex vs Full-duplex</h3>
+  <ul>
+    <li><strong>Half-duplex:</strong> transmite o recibe, no ambos. Usa CSMA/CD. Típico con hubs.</li>
+    <li><strong>Full-duplex:</strong> transmite y recibe simultáneamente. NO usa CSMA/CD. Sin colisiones. Típico con switches.</li>
+  </ul>
+
+  <h3>Cables Ethernet</h3>
+  <table>
+    <tr><th>Cable</th><th>Uso</th></tr>
+    <tr><td><strong>Straight-through (directo)</strong></td><td>Dispositivos distintos: PC↔Switch, Switch↔Router</td></tr>
+    <tr><td><strong>Crossover (cruzado)</strong></td><td>Dispositivos iguales: PC↔PC, Switch↔Switch, Router↔Router</td></tr>
+    <tr><td><strong>Rollover (consola)</strong></td><td>PC↔puerto consola de router/switch (configuración)</td></tr>
+  </table>
+  <div class="callout tip">Los switches modernos tienen <strong>Auto-MDIX</strong>: detectan el tipo de cable automáticamente. En la práctica casi nunca importa, pero en el examen sí lo preguntan.</div>
+
+  <div class="callout warn">Recuerda: la velocidad de Ethernet no aumenta tu velocidad de Internet si tu enlace WAN es más lento. Ethernet a 1 Gbps con Internet de 50 Mbps → tu Internet sigue siendo 50 Mbps.</div>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Tema 4</h4>
+    <label><input type="checkbox" data-check="t4-1"> Conozco la evolución de Ethernet (10 → 10G)</label>
+    <label><input type="checkbox" data-check="t4-2"> Sé descomponer 100BaseTX</label>
+    <label><input type="checkbox" data-check="t4-3"> Entiendo la trama Ethernet 802.3</label>
+    <label><input type="checkbox" data-check="t4-4"> Sé cómo aprende un switch (forwarding, flooding)</label>
+    <label><input type="checkbox" data-check="t4-5"> Distingo cables straight, crossover, rollover</label>
+    <button class="module-complete-btn" data-complete="3">Marcar tema estudiado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="2">← Anterior</button>
+    <button data-goto="4">Siguiente: Direccionamiento IP →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 4: DIRECCIONAMIENTO IP ============== -->
+<section class="module" data-module="4">
+  <h2>Tema 5 — Direccionamiento IP <span class="badge">IPv4 + Subnetting</span></h2>
+  <p>Este es el tema más numérico del curso. Si dominas direccionamiento IP, dominas redes.</p>
+
+  <h3>¿Qué es una dirección IP?</h3>
+  <div class="callout theory">
+    Identificador <strong>lógico</strong> (de software) de Capa 3 que identifica un dispositivo en una red. IPv4 usa <strong>32 bits</strong> agrupados en 4 octetos de 8 bits, expresados en decimal: <code>192.168.1.1</code>.
+  </div>
+
+  <h3>Estructura de una IP</h3>
+  <p>Una IP se divide en dos partes:</p>
+  <ul>
+    <li><strong>Network portion (red):</strong> identifica la red.</li>
+    <li><strong>Host portion (host):</strong> identifica al dispositivo dentro de la red.</li>
+  </ul>
+  <p>La <strong>máscara de subred</strong> (subnet mask) dice cuántos bits son de red.</p>
+
+  <h3>Conversión binaria-decimal (lo que necesitas saber)</h3>
+  <table>
+    <tr><th>Posición</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr>
+    <tr><th>Valor</th><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+  </table>
+  <p>Un octeto de 8 bits puede valer de 0 (00000000) a 255 (11111111). Cada bit en 1 suma su valor.</p>
+  <div class="callout example">
+    <code>11000000</code> = 128 + 64 = <strong>192</strong><br>
+    <code>10101000</code> = 128 + 32 + 8 = <strong>168</strong><br>
+    <code>11111111</code> = 128+64+32+16+8+4+2+1 = <strong>255</strong>
+  </div>
+
+  <h3>Clases de IP (sistema clásico, antes de CIDR)</h3>
+  <table>
+    <tr><th>Clase</th><th>Rango primer octeto</th><th>Máscara default</th><th>Uso</th></tr>
+    <tr><td>A</td><td>1 – 126</td><td>255.0.0.0 (/8)</td><td>Redes muy grandes (16M hosts)</td></tr>
+    <tr><td>B</td><td>128 – 191</td><td>255.255.0.0 (/16)</td><td>Redes medianas (65k hosts)</td></tr>
+    <tr><td>C</td><td>192 – 223</td><td>255.255.255.0 (/24)</td><td>Redes pequeñas (254 hosts)</td></tr>
+    <tr><td>D</td><td>224 – 239</td><td>—</td><td>Multicast</td></tr>
+    <tr><td>E</td><td>240 – 255</td><td>—</td><td>Experimental</td></tr>
+  </table>
+  <div class="callout warn">El 127.x.x.x está reservado para loopback (localhost). Por eso clase A va 1-126, no 1-127.</div>
+
+  <h3>Direcciones IP privadas (RFC 1918)</h3>
+  <p>No son enrutables por Internet. Para uso interno:</p>
+  <table>
+    <tr><th>Clase</th><th>Rango privado</th></tr>
+    <tr><td>A</td><td>10.0.0.0 – 10.255.255.255 (/8)</td></tr>
+    <tr><td>B</td><td>172.16.0.0 – 172.31.255.255 (/12)</td></tr>
+    <tr><td>C</td><td>192.168.0.0 – 192.168.255.255 (/16)</td></tr>
+  </table>
+
+  <h3>Direcciones especiales</h3>
+  <table>
+    <tr><th>Dirección</th><th>Significado</th></tr>
+    <tr><td>0.0.0.0</td><td>Esta red / cualquier red (ruta por defecto)</td></tr>
+    <tr><td>127.0.0.1</td><td>Loopback (localhost)</td></tr>
+    <tr><td>255.255.255.255</td><td>Broadcast limitado (no atraviesa routers)</td></tr>
+    <tr><td>169.254.x.x</td><td>APIPA (auto-asignada cuando DHCP falla)</td></tr>
+  </table>
+
+  <h3>CIDR y notación /N</h3>
+  <p>CIDR = Classless Inter-Domain Routing. Reemplaza las clases. La notación <code>/N</code> indica cuántos bits son de red.</p>
+  <table>
+    <tr><th>/N</th><th>Máscara</th><th>Hosts útiles</th><th>Uso típico</th></tr>
+    <tr><td>/8</td><td>255.0.0.0</td><td>16.777.214</td><td>Clase A completa</td></tr>
+    <tr><td>/16</td><td>255.255.0.0</td><td>65.534</td><td>Clase B completa</td></tr>
+    <tr><td>/24</td><td>255.255.255.0</td><td>254</td><td>LAN típica</td></tr>
+    <tr><td>/25</td><td>255.255.255.128</td><td>126</td><td>Subred mediana</td></tr>
+    <tr><td>/26</td><td>255.255.255.192</td><td>62</td><td>Subred pequeña</td></tr>
+    <tr><td>/27</td><td>255.255.255.224</td><td>30</td><td>Subred muy pequeña</td></tr>
+    <tr><td>/28</td><td>255.255.255.240</td><td>14</td><td>Subred mínima</td></tr>
+    <tr><td>/29</td><td>255.255.255.248</td><td>6</td><td>Pequeño grupo</td></tr>
+    <tr><td>/30</td><td>255.255.255.252</td><td>2</td><td>Enlace punto-a-punto</td></tr>
+    <tr><td>/31</td><td>255.255.255.254</td><td>2 (sin red/broadcast)</td><td>Punto-a-punto RFC 3021</td></tr>
+    <tr><td>/32</td><td>255.255.255.255</td><td>1</td><td>Host único (loopback)</td></tr>
+  </table>
+
+  <h3>Fórmulas clave</h3>
+  <div class="callout theory">
+    <strong>Hosts útiles</strong> = 2<sup>(bits de host)</sup> − 2<br>
+    Se restan 2 porque la primera dirección es la red y la última es el broadcast.<br><br>
+    <strong>Subredes posibles</strong> = 2<sup>(bits prestados)</sup>
+  </div>
+
+  <h3>Subnetting paso a paso</h3>
+  <p>Ejemplo: tengo <code>192.168.1.0/24</code> y necesito crear 4 subredes.</p>
+
+  <h4>Paso 1: Calcular bits a prestar</h4>
+  <p>Necesito 4 subredes. 2<sup>n</sup> ≥ 4 → n = 2 bits. Le presto 2 bits a la porción de host.</p>
+
+  <h4>Paso 2: Nueva máscara</h4>
+  <p>Original: /24. Más 2 bits = /26. Máscara: <code>255.255.255.192</code>.</p>
+
+  <h4>Paso 3: Calcular tamaño de cada subred</h4>
+  <p>Bits de host = 32 − 26 = 6 bits. Hosts totales = 2<sup>6</sup> = 64. Hosts útiles = 64 − 2 = 62.</p>
+
+  <h4>Paso 4: Listar subredes</h4>
+  <table>
+    <tr><th>Subred</th><th>Red</th><th>Primer host</th><th>Último host</th><th>Broadcast</th></tr>
+    <tr><td>1</td><td>192.168.1.0</td><td>192.168.1.1</td><td>192.168.1.62</td><td>192.168.1.63</td></tr>
+    <tr><td>2</td><td>192.168.1.64</td><td>192.168.1.65</td><td>192.168.1.126</td><td>192.168.1.127</td></tr>
+    <tr><td>3</td><td>192.168.1.128</td><td>192.168.1.129</td><td>192.168.1.190</td><td>192.168.1.191</td></tr>
+    <tr><td>4</td><td>192.168.1.192</td><td>192.168.1.193</td><td>192.168.1.254</td><td>192.168.1.255</td></tr>
+  </table>
+
+  <h3>Wildcard mask</h3>
+  <p>La <strong>inversa</strong> de la máscara. Se usa en ACLs y OSPF.</p>
+  <div class="callout example">
+    Máscara <code>255.255.255.0</code> → Wildcard <code>0.0.0.255</code><br>
+    Máscara <code>255.255.255.252</code> → Wildcard <code>0.0.0.3</code><br>
+    Truco: 255 - octeto de máscara = octeto de wildcard.
+  </div>
+
+  <h3>VLSM (Variable Length Subnet Masking)</h3>
+  <p>Permite usar máscaras de distinto tamaño en distintas subredes. Más eficiente que subnetting tradicional.</p>
+  <div class="callout example">
+    De <code>192.168.1.0/24</code>:<br>
+    • LAN A (100 hosts) → /25 (126 útiles): 192.168.1.0 – 192.168.1.127<br>
+    • LAN B (50 hosts) → /26 (62 útiles): 192.168.1.128 – 192.168.1.191<br>
+    • Enlace serial → /30 (2 útiles): 192.168.1.192 – 192.168.1.195
+  </div>
+
+  <h3>IPv6 (vista panorámica)</h3>
+  <ul>
+    <li>128 bits (vs 32 de IPv4) → 340 sextillones de direcciones.</li>
+    <li>Notación hexadecimal: <code>2001:0db8:acad:1::1/64</code>.</li>
+    <li>Sin NAT, sin broadcast (usa multicast).</li>
+    <li>Coexistencia con IPv4 → "dual stack".</li>
+  </ul>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Tema 5</h4>
+    <label><input type="checkbox" data-check="t5-1"> Sé convertir binario ↔ decimal</label>
+    <label><input type="checkbox" data-check="t5-2"> Distingo clases A, B, C</label>
+    <label><input type="checkbox" data-check="t5-3"> Conozco las IPs privadas RFC 1918</label>
+    <label><input type="checkbox" data-check="t5-4"> Sé calcular subredes con /25, /26, /27, /30</label>
+    <label><input type="checkbox" data-check="t5-5"> Sé calcular wildcard mask</label>
+    <label><input type="checkbox" data-check="t5-6"> Entiendo VLSM</label>
+    <button class="module-complete-btn" data-complete="4">Marcar tema estudiado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="3">← Anterior</button>
+    <button data-goto="5">Siguiente: Capa de Red →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 5: CAPA DE RED ============== -->
+<section class="module" data-module="5">
+  <h2>Tema 6 — Capa de Red <span class="badge">Capa 3 OSI</span></h2>
+  <p>Aquí viven los routers, las direcciones IP y la magia del enrutamiento entre redes.</p>
+
+  <h3>Responsabilidades de la Capa 3</h3>
+  <div class="callout theory">
+    <ul>
+      <li><strong>Direccionamiento lógico:</strong> asignar direcciones (IPs) que identifican dispositivos en una red.</li>
+      <li><strong>Determinación de ruta:</strong> escoger el mejor camino para llegar al destino.</li>
+      <li><strong>Packet switching:</strong> mover paquetes de una interfaz de entrada a la interfaz de salida correcta.</li>
+    </ul>
+  </div>
+
+  <h3>Routed protocols vs Routing protocols</h3>
+  <table>
+    <tr><th></th><th>Routed protocols</th><th>Routing protocols</th></tr>
+    <tr><td>Función</td><td>Llevan los datos del usuario</td><td>Ayudan al router a decidir el camino</td></tr>
+    <tr><td>Ejemplos</td><td>IP, IPX, AppleTalk, DECnet</td><td>RIP, IGRP, EIGRP, OSPF, BGP</td></tr>
+    <tr><td>Analogía</td><td>El paquete que viaja</td><td>El mapa que dice cómo llegar</td></tr>
+  </table>
+
+  <h3>Tabla de routing</h3>
+  <p>Cada router mantiene una tabla con la información para enrutar paquetes. Cada entrada contiene:</p>
+  <ul>
+    <li>Red destino (con su máscara)</li>
+    <li>Siguiente salto (next-hop) o interfaz de salida</li>
+    <li>Métrica (costo)</li>
+    <li>Tipo de ruta (C, L, S, R, O, etc.)</li>
+    <li>Distancia administrativa</li>
+  </ul>
+
+  <pre><span class="prompt">R1#</span> show ip route
+Codes: C - connected, L - local, S - static, R - RIP,
+       O - OSPF, B - BGP, * - candidate default
+
+C    192.168.1.0/24 is directly connected, GigabitEthernet0/0
+L    192.168.1.1/32 is directly connected, GigabitEthernet0/0
+S    10.0.0.0/8 [1/0] via 192.168.2.2
+O    172.16.0.0/16 [110/65] via 192.168.2.2, 00:01:23, Serial0/0/0
+S*   0.0.0.0/0 [1/0] via 192.168.2.2</pre>
+
+  <h3>Distancia administrativa (AD)</h3>
+  <p>Cuando un router aprende la misma red por dos fuentes distintas, elige la que tiene MENOR distancia administrativa (más confiable).</p>
+  <table>
+    <tr><th>Fuente</th><th>AD</th></tr>
+    <tr><td>Directamente conectada</td><td>0</td></tr>
+    <tr><td>Estática</td><td>1</td></tr>
+    <tr><td>EIGRP sumarización</td><td>5</td></tr>
+    <tr><td>BGP externo</td><td>20</td></tr>
+    <tr><td>EIGRP interno</td><td>90</td></tr>
+    <tr><td>OSPF</td><td>110</td></tr>
+    <tr><td>IS-IS</td><td>115</td></tr>
+    <tr><td>RIP</td><td>120</td></tr>
+    <tr><td>EIGRP externo</td><td>170</td></tr>
+    <tr><td>BGP interno</td><td>200</td></tr>
+    <tr><td>Desconocida (no se usa)</td><td>255</td></tr>
+  </table>
+
+  <h3>Funciones de un router</h3>
+  <ul>
+    <li><strong>Conectar redes separadas.</strong></li>
+    <li><strong>Mejor ruta basada en Capa 3.</strong></li>
+    <li><strong>Switching de paquetes:</strong> recibe por una interfaz, envía por la apropiada.</li>
+    <li><strong>Segmentar dominios de broadcast.</strong></li>
+    <li><strong>Filtrar tráfico</strong> (con ACLs).</li>
+  </ul>
+
+  <h3>Comunicación entre redes</h3>
+  <p>Cuando una PC quiere comunicarse con otra:</p>
+  <ol>
+    <li>Compara su IP con la del destino aplicando su máscara.</li>
+    <li>Si están en la <strong>misma red</strong> → envía directo (ARP para encontrar MAC).</li>
+    <li>Si están en <strong>redes distintas</strong> → envía al gateway (router) y este se encarga.</li>
+  </ol>
+
+  <h3>ARP (Address Resolution Protocol)</h3>
+  <p>Traduce IP → MAC. Esencial para comunicación en LAN.</p>
+  <ol>
+    <li>PC1 quiere enviar a 192.168.1.10. ¿Cuál es su MAC?</li>
+    <li>PC1 manda ARP request en broadcast: "¿Quién tiene 192.168.1.10?"</li>
+    <li>La PC que tiene esa IP responde con su MAC.</li>
+    <li>PC1 guarda en su tabla ARP la asociación IP-MAC.</li>
+  </ol>
+
+  <h3>ICMP (Internet Control Message Protocol)</h3>
+  <p>Protocolo de mensajes de control y error en Capa 3. Lo usa <code>ping</code> y <code>traceroute</code>.</p>
+  <ul>
+    <li><strong>Echo Request / Echo Reply:</strong> ping.</li>
+    <li><strong>Destination Unreachable:</strong> destino inalcanzable.</li>
+    <li><strong>Time Exceeded:</strong> TTL llegó a 0. Usado por traceroute.</li>
+    <li><strong>Redirect:</strong> mejor ruta disponible.</li>
+  </ul>
+
+  <h3>Encabezado IPv4 (resumen)</h3>
+  <ul>
+    <li><strong>Version:</strong> 4 o 6.</li>
+    <li><strong>TTL (Time To Live):</strong> contador que se decrementa en cada router. Si llega a 0 → paquete descartado. Evita loops.</li>
+    <li><strong>Protocol:</strong> qué protocolo de capa superior (TCP=6, UDP=17, ICMP=1).</li>
+    <li><strong>Source IP / Destination IP.</strong></li>
+    <li><strong>Header Checksum:</strong> verificación.</li>
+  </ul>
+
+  <h3>NAT (Network Address Translation)</h3>
+  <p>Permite que múltiples dispositivos con IPs privadas salgan a Internet con una sola IP pública.</p>
+  <ul>
+    <li><strong>NAT estático:</strong> 1 IP privada ↔ 1 IP pública.</li>
+    <li><strong>NAT dinámico:</strong> pool de IPs públicas asignadas dinámicamente.</li>
+    <li><strong>PAT (NAT overload):</strong> muchas IPs privadas comparten 1 IP pública usando puertos. Lo más común.</li>
+  </ul>
+
+  <div class="callout do">Recuerda: routers separan dominios de broadcast. Switches solo dominios de colisión. Si una red tiene demasiado tráfico de broadcast, hay que dividirla con routers o VLANs.</div>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Tema 6</h4>
+    <label><input type="checkbox" data-check="t6-1"> Distingo routed vs routing protocols</label>
+    <label><input type="checkbox" data-check="t6-2"> Sé leer una tabla de routing</label>
+    <label><input type="checkbox" data-check="t6-3"> Memorizo distancias administrativas claves</label>
+    <label><input type="checkbox" data-check="t6-4"> Entiendo cómo funciona ARP</label>
+    <label><input type="checkbox" data-check="t6-5"> Conozco TTL y por qué existe</label>
+    <label><input type="checkbox" data-check="t6-6"> Diferencio NAT estático, dinámico y PAT</label>
+    <button class="module-complete-btn" data-complete="5">Marcar tema estudiado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="4">← Anterior</button>
+    <button data-goto="6">Siguiente: Algoritmos de Enrutamiento →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 6: ALGORITMOS DE ENRUTAMIENTO ============== -->
+<section class="module" data-module="6">
+  <h2>Tema 7 — Algoritmos de Enrutamiento <span class="badge">Cómo eligen las rutas</span></h2>
+  <p>Los protocolos de enrutamiento usan algoritmos para calcular el mejor camino. Conocer estos algoritmos te ayuda a entender por qué OSPF, RIP, EIGRP y BGP funcionan distinto.</p>
+
+  <h3>Clasificación de protocolos de enrutamiento</h3>
+
+  <h4>Por su alcance</h4>
+  <ul>
+    <li><strong>IGP (Interior Gateway Protocol):</strong> dentro de un sistema autónomo. Ej: RIP, OSPF, EIGRP, IS-IS.</li>
+    <li><strong>EGP (Exterior Gateway Protocol):</strong> entre sistemas autónomos. Ej: BGP.</li>
+  </ul>
+
+  <h4>Por su algoritmo</h4>
+  <ul>
+    <li><strong>Distance Vector:</strong> "router rumor" — cada router le cuenta a sus vecinos qué redes conoce y a qué distancia.</li>
+    <li><strong>Link State:</strong> "mapa completo" — cada router conoce la topología completa y calcula rutas con Dijkstra.</li>
+    <li><strong>Hybrid:</strong> mezcla. Ej: EIGRP.</li>
+    <li><strong>Path Vector:</strong> usa caminos completos. Ej: BGP.</li>
+  </ul>
+
+  <h3>Distance Vector — "Routing by rumor"</h3>
+  <div class="callout theory">
+    Cada router envía periódicamente su tabla de routing completa a sus vecinos directos. Los vecinos actualizan su propia tabla. Eventualmente todos convergen.
+  </div>
+
+  <h4>Características</h4>
+  <ul>
+    <li>Actualizaciones periódicas (cada 30s en RIP).</li>
+    <li>Solo intercambian con vecinos directos.</li>
+    <li>Lento para converger.</li>
+    <li>Métricas simples (hops).</li>
+    <li>Vulnerable a loops.</li>
+  </ul>
+
+  <h4>Algoritmo Bellman-Ford</h4>
+  <p>Base matemática del distance vector. Cada router actualiza su distancia a un destino usando la fórmula: <code>D(X→Z) = mín{C(X→Y) + D(Y→Z)}</code> para todos los vecinos Y.</p>
+
+  <h4>Problema: routing loops</h4>
+  <p>Si un router cree que para llegar a la red A debe pasar por router B, y B cree que debe pasar por A → loop infinito.</p>
+
+  <h4>Soluciones a los loops</h4>
+  <ul>
+    <li><strong>Maximum hop count:</strong> RIP usa máximo 15 hops. Lo que esté a 16 es "infinito" (inalcanzable).</li>
+    <li><strong>Split Horizon:</strong> no anuncies una ruta de regreso por la misma interfaz por donde la aprendiste.</li>
+    <li><strong>Route Poisoning:</strong> cuando una ruta cae, anúnciala con métrica "infinita" para que todos sepan.</li>
+    <li><strong>Hold-down timers:</strong> cuando una ruta cae, espera antes de aceptar nuevas actualizaciones sobre ella.</li>
+    <li><strong>Triggered updates:</strong> cuando algo cambia, manda actualización inmediata sin esperar al timer.</li>
+  </ul>
+
+  <h4>Ejemplos de protocolos distance vector</h4>
+  <ul>
+    <li><strong>RIP v1/v2:</strong> métrica = hops. Máx 15. Cada 30s. Simple, lento, poco escalable.</li>
+    <li><strong>IGRP:</strong> propietario de Cisco. Métrica compuesta (ancho de banda, retardo, carga, confiabilidad). Obsoleto.</li>
+  </ul>
+
+  <h3>Link State — "Mapa completo de la red"</h3>
+  <div class="callout theory">
+    Cada router conoce la topología completa de la red. Envía información solo cuando hay cambios (no periódicamente). Usa el algoritmo de Dijkstra (SPF — Shortest Path First) para calcular rutas.
+  </div>
+
+  <h4>Pasos del algoritmo Link State</h4>
+  <ol>
+    <li>Cada router descubre a sus <strong>vecinos directos</strong> usando paquetes Hello.</li>
+    <li>Cada router envía <strong>LSAs (Link State Advertisements)</strong> describiendo sus enlaces.</li>
+    <li>Los LSAs se inundan (flooding) por toda el área.</li>
+    <li>Cada router construye una <strong>LSDB (Link State Database)</strong> completa.</li>
+    <li>Cada router ejecuta Dijkstra sobre su LSDB para construir el árbol SPF.</li>
+    <li>Del árbol SPF derivan las rutas para la tabla de routing.</li>
+  </ol>
+
+  <h4>Características</h4>
+  <ul>
+    <li>Convergencia rápida.</li>
+    <li>Solo envía actualizaciones cuando hay cambios (incrementales).</li>
+    <li>No vulnerable a loops como distance vector.</li>
+    <li>Más uso de CPU/memoria.</li>
+    <li>Métrica = costo (basado en ancho de banda).</li>
+  </ul>
+
+  <h4>Algoritmo de Dijkstra (SPF)</h4>
+  <ol>
+    <li>Marco mi router como "actual", costo 0.</li>
+    <li>Examino los vecinos del actual, calculo costo total a cada uno.</li>
+    <li>Elijo el de menor costo, lo marco como visitado.</li>
+    <li>Repito desde ese nodo hasta visitar todos.</li>
+    <li>Resultado: árbol de caminos más cortos desde mi router a todos los destinos.</li>
+  </ol>
+
+  <h4>Ejemplos de protocolos link state</h4>
+  <ul>
+    <li><strong>OSPF (Open Shortest Path First):</strong> el rey de los IGP. Estándar abierto. Áreas, router-IDs, áreas backbone (area 0).</li>
+    <li><strong>IS-IS:</strong> similar a OSPF. Usado en redes de proveedores grandes.</li>
+  </ul>
+
+  <h3>Híbrido: EIGRP</h3>
+  <p>Combina lo mejor de distance vector y link state. Propietario de Cisco (ahora abierto). Usa el algoritmo DUAL (Diffusing Update Algorithm) para garantizar rutas libres de loops y convergencia rápida.</p>
+  <ul>
+    <li>Métrica compuesta: ancho de banda + retardo (por defecto).</li>
+    <li>Mantiene successor (mejor ruta) y feasible successor (backup).</li>
+    <li>Convergencia muy rápida.</li>
+  </ul>
+
+  <h3>Path Vector: BGP</h3>
+  <p>Usado entre sistemas autónomos en Internet. No usa métricas simples sino políticas (atributos). El "AS-Path" registra los AS por los que pasó la ruta.</p>
+
+  <h3>Comparación rápida</h3>
+  <table>
+    <tr><th>Protocolo</th><th>Algoritmo</th><th>Métrica</th><th>AD</th><th>Convergencia</th></tr>
+    <tr><td>RIP v2</td><td>Distance Vector</td><td>Hops (máx 15)</td><td>120</td><td>Lenta</td></tr>
+    <tr><td>EIGRP</td><td>Híbrido (DUAL)</td><td>BW + retardo</td><td>90</td><td>Muy rápida</td></tr>
+    <tr><td>OSPF</td><td>Link State (Dijkstra)</td><td>Costo (BW)</td><td>110</td><td>Rápida</td></tr>
+    <tr><td>IS-IS</td><td>Link State</td><td>Costo</td><td>115</td><td>Rápida</td></tr>
+    <tr><td>BGP</td><td>Path Vector</td><td>Atributos (políticas)</td><td>20/200</td><td>Lenta</td></tr>
+  </table>
+
+  <h3>Convergencia</h3>
+  <div class="callout theory">
+    Tiempo que tardan todos los routers en tener una visión consistente de la red después de un cambio. <strong>Cuanto más rápida la convergencia, mejor</strong>.
+  </div>
+
+  <h3>Métricas</h3>
+  <ul>
+    <li><strong>Hop count:</strong> número de routers entre origen y destino. Simple pero engañosa.</li>
+    <li><strong>Bandwidth:</strong> ancho de banda del enlace.</li>
+    <li><strong>Delay:</strong> retardo del enlace.</li>
+    <li><strong>Cost:</strong> número calculado, normalmente inverso al ancho de banda.</li>
+    <li><strong>Load:</strong> utilización actual del enlace.</li>
+    <li><strong>Reliability:</strong> errores en el enlace.</li>
+  </ul>
+
+  <div class="callout warn">Para el parcial recuerda: OSPF es <strong>link state</strong>, usa <strong>Dijkstra</strong>, área 0 es la backbone, métrica = costo, AD = 110. Es lo que vas a configurar en la práctica.</div>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Tema 7</h4>
+    <label><input type="checkbox" data-check="t7-1"> Distingo IGP vs EGP</label>
+    <label><input type="checkbox" data-check="t7-2"> Entiendo distance vector y sus problemas (loops)</label>
+    <label><input type="checkbox" data-check="t7-3"> Conozco las técnicas anti-loop (split horizon, etc.)</label>
+    <label><input type="checkbox" data-check="t7-4"> Entiendo link state y Dijkstra</label>
+    <label><input type="checkbox" data-check="t7-5"> Comparo RIP, EIGRP, OSPF, BGP</label>
+    <button class="module-complete-btn" data-complete="6">Marcar tema estudiado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="5">← Anterior</button>
+    <button data-goto="7">Siguiente: Enrutamiento Estático →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 7: ENRUTAMIENTO ESTÁTICO ============== -->
+<section class="module" data-module="7">
+  <h2>Tema 8 — Enrutamiento Estático <span class="badge">Rutas manuales</span></h2>
+  <p>Antes de usar OSPF, hay que entender el enrutamiento manual: las rutas estáticas. Son la base y siguen siendo útiles en muchos casos reales.</p>
+
+  <h3>¿Qué es una ruta estática?</h3>
+  <div class="callout theory">
+    Una ruta que el administrador <strong>configura manualmente</strong> en el router. No se aprende, no se intercambia con otros routers, no cambia salvo que tú la cambies.
+  </div>
+
+  <h3>Ventajas y desventajas</h3>
+  <table>
+    <tr><th>Ventajas</th><th>Desventajas</th></tr>
+    <tr><td>Sin overhead de CPU/ancho de banda</td><td>Configuración manual en cada router</td></tr>
+    <tr><td>Predecible, fácil de auditar</td><td>No se adapta a cambios</td></tr>
+    <tr><td>Más segura (no anuncia rutas)</td><td>No escala en redes grandes</td></tr>
+    <tr><td>Útil para enlaces stub o punto-a-punto</td><td>Mantenimiento alto</td></tr>
+  </table>
+
+  <h3>Cuándo usar rutas estáticas</h3>
+  <ul>
+    <li>Redes muy pequeñas (3-4 routers).</li>
+    <li>Conexión a un ISP (ruta por defecto).</li>
+    <li>Redes "stub" (sin redundancia).</li>
+    <li>Routers que no soportan protocolos dinámicos.</li>
+    <li>Como backup de rutas dinámicas con AD más alta ("floating static route").</li>
+  </ul>
+
+  <h3>Sintaxis del comando</h3>
+  <pre><span class="prompt">R1(config)#</span> ip route &lt;red_destino&gt; &lt;máscara&gt; { &lt;next-hop&gt; | &lt;interfaz_salida&gt; } [distancia]</pre>
+
+  <h3>Tipos de rutas estáticas</h3>
+
+  <h4>1. Ruta estática estándar (next-hop)</h4>
+  <pre><span class="prompt">R1(config)#</span> ip route 192.168.2.0 255.255.255.0 10.0.0.2</pre>
+  <p>"Para llegar a la red 192.168.2.0/24, manda el paquete a la IP 10.0.0.2".</p>
+
+  <h4>2. Ruta estática por interfaz de salida</h4>
+  <pre><span class="prompt">R1(config)#</span> ip route 192.168.2.0 255.255.255.0 Serial0/0/0</pre>
+  <p>"Para llegar a esa red, manda por mi interfaz Serial0/0/0".</p>
+  <div class="callout tip">Usar interfaz de salida es típico en enlaces seriales punto-a-punto. Con interfaces broadcast (Ethernet) es preferible usar next-hop para que ARP sepa a quién resolver.</div>
+
+  <h4>3. Ruta completamente especificada</h4>
+  <pre><span class="prompt">R1(config)#</span> ip route 192.168.2.0 255.255.255.0 Serial0/0/0 10.0.0.2</pre>
+  <p>Especifica AMBAS: interfaz y next-hop. Más explícito.</p>
+
+  <h4>4. Ruta por defecto (default route)</h4>
+  <pre><span class="prompt">R1(config)#</span> ip route 0.0.0.0 0.0.0.0 Serial0/0/1</pre>
+  <p>"Para cualquier destino desconocido, manda por Serial0/0/1". Útil para enlace a ISP.</p>
+  <div class="callout example">
+    Esto es exactamente lo que configuras en el Parcial OSPF: la ruta por defecto desde R1 hacia el ISP, y luego la rediriges por OSPF con <code>default-information originate</code>.
+  </div>
+
+  <h4>5. Ruta estática flotante (floating static)</h4>
+  <pre><span class="prompt">R1(config)#</span> ip route 192.168.2.0 255.255.255.0 10.0.0.2 200</pre>
+  <p>Le ponemos AD alta (mayor que la del protocolo dinámico) para que NO se use a menos que el camino dinámico caiga. Es un backup.</p>
+
+  <h3>Verificación</h3>
+  <pre><span class="prompt">R1#</span> show ip route static    <span class="comment">! Solo rutas estáticas</span>
+<span class="prompt">R1#</span> show ip route             <span class="comment">! Todas las rutas</span>
+<span class="prompt">R1#</span> show running-config | section ip route</pre>
+
+  <h3>Eliminar una ruta estática</h3>
+  <pre><span class="prompt">R1(config)#</span> no ip route 192.168.2.0 255.255.255.0 10.0.0.2</pre>
+
+  <h3>Ejemplo completo: red de 3 routers</h3>
+  <div class="callout example">
+    Topología:<br>
+    <code>[LAN1 192.168.1.0/24] — R1 — [10.0.0.0/30] — R2 — [20.0.0.0/30] — R3 — [LAN3 192.168.3.0/24]</code><br><br>
+    Cada router necesita rutas a las redes que NO tiene directamente conectadas.
+  </div>
+
+  <h4>En R1</h4>
+  <pre><span class="prompt">R1(config)#</span> ip route 20.0.0.0 255.255.255.252 10.0.0.2
+<span class="prompt">R1(config)#</span> ip route 192.168.3.0 255.255.255.0 10.0.0.2</pre>
+
+  <h4>En R2</h4>
+  <pre><span class="prompt">R2(config)#</span> ip route 192.168.1.0 255.255.255.0 10.0.0.1
+<span class="prompt">R2(config)#</span> ip route 192.168.3.0 255.255.255.0 20.0.0.2</pre>
+
+  <h4>En R3</h4>
+  <pre><span class="prompt">R3(config)#</span> ip route 10.0.0.0 255.255.255.252 20.0.0.1
+<span class="prompt">R3(config)#</span> ip route 192.168.1.0 255.255.255.0 20.0.0.1</pre>
+
+  <h3>Sumarización (ruta resumida)</h3>
+  <p>En vez de configurar varias rutas estáticas, usa una sola que cubra todas las subredes.</p>
+  <div class="callout example">
+    En vez de:<br>
+    <code>ip route 192.168.0.0 255.255.255.0 ...</code><br>
+    <code>ip route 192.168.1.0 255.255.255.0 ...</code><br>
+    <code>ip route 192.168.2.0 255.255.255.0 ...</code><br>
+    <code>ip route 192.168.3.0 255.255.255.0 ...</code><br><br>
+    Una sola ruta resumida:<br>
+    <code>ip route 192.168.0.0 255.255.252.0 ...</code>
+  </div>
+
+  <h3>Errores comunes</h3>
+  <ul>
+    <li>❌ Olvidar configurar la ruta en AMBOS sentidos. La ida funciona, la vuelta no.</li>
+    <li>❌ Apuntar a un next-hop que el router no puede alcanzar.</li>
+    <li>❌ Máscara incorrecta en la ruta.</li>
+    <li>❌ Usar interfaz de salida en Ethernet sin next-hop → ARP problems.</li>
+    <li>❌ Crear loops por rutas mal configuradas.</li>
+  </ul>
+
+  <div class="callout do">Para el parcial: la única ruta estática que vas a configurar es la <strong>ruta por defecto</strong> en R1 hacia el ISP (<code>ip route 0.0.0.0 0.0.0.0 Serial0/0/1</code>). Las demás rutas las aprenderán los routers automáticamente por OSPF.</div>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Tema 8</h4>
+    <label><input type="checkbox" data-check="t8-1"> Entiendo cuándo usar rutas estáticas vs dinámicas</label>
+    <label><input type="checkbox" data-check="t8-2"> Conozco la sintaxis del comando ip route</label>
+    <label><input type="checkbox" data-check="t8-3"> Distingo next-hop vs interfaz de salida</label>
+    <label><input type="checkbox" data-check="t8-4"> Sé qué es una ruta por defecto y cuándo usarla</label>
+    <label><input type="checkbox" data-check="t8-5"> Entiendo las rutas estáticas flotantes</label>
+    <button class="module-complete-btn" data-complete="7">Marcar tema estudiado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="6">← Anterior</button>
+    <button data-goto="8">Siguiente: Configuración Router →</button>
+  </div>
+</section>
+
+<!-- ============== MÓDULO 8: CONFIGURACIÓN BÁSICA ROUTER ============== -->
+<section class="module" data-module="8">
+  <h2>Tema 9 — Configuración Básica de Router <span class="badge">CCNA 2 Módulo 1</span></h2>
+  <p>Aquí aprendes a configurar un router Cisco desde cero usando la CLI. Este es el punto de partida para TODO lo que harás en Packet Tracer.</p>
+
+  <h3>Routers vs Switches Cisco</h3>
+  <p>Tienen muchas similitudes:</p>
+  <ul>
+    <li>Sistema operativo modal similar (IOS).</li>
+    <li>Estructura de comandos similar.</li>
+    <li>Muchos comandos compartidos.</li>
+    <li>Pasos de configuración inicial idénticos.</li>
+  </ul>
+  <p>Diferencias clave: las interfaces. Switches LAN (FastEthernet, GigabitEthernet). Routers además tienen Serial, DSL, módulos HWIC.</p>
+
+  <h3>Tareas de configuración básica que SIEMPRE se hacen</h3>
+  <ol>
+    <li>Nombrar el dispositivo (hostname).</li>
+    <li>Configurar contraseñas.</li>
+    <li>Configurar banner (mensaje legal).</li>
+    <li>Guardar la configuración.</li>
+  </ol>
+
+  <h3>Plantilla de configuración inicial</h3>
+  <pre><span class="prompt">Router></span> enable
+<span class="prompt">Router#</span> configure terminal
+<span class="prompt">Router(config)#</span> hostname R1
+<span class="prompt">R1(config)#</span> enable secret class
+<span class="prompt">R1(config)#</span> line console 0
+<span class="prompt">R1(config-line)#</span> password cisco
+<span class="prompt">R1(config-line)#</span> login
+<span class="prompt">R1(config-line)#</span> exit
+<span class="prompt">R1(config)#</span> line vty 0 4
+<span class="prompt">R1(config-line)#</span> password cisco
+<span class="prompt">R1(config-line)#</span> login
+<span class="prompt">R1(config-line)#</span> exit
+<span class="prompt">R1(config)#</span> service password-encryption
+<span class="prompt">R1(config)#</span> banner motd $ Authorized Access Only! $</pre>
+
+  <h3>Explicación comando por comando</h3>
+  <table>
+    <tr><th>Comando</th><th>Función</th></tr>
+    <tr><td><code>enable</code></td><td>Pasa de modo usuario (&gt;) a modo privilegiado (#)</td></tr>
+    <tr><td><code>configure terminal</code></td><td>Entra a modo configuración global</td></tr>
+    <tr><td><code>hostname R1</code></td><td>Le da nombre al router</td></tr>
+    <tr><td><code>enable secret class</code></td><td>Contraseña para modo privilegiado, encriptada con MD5</td></tr>
+    <tr><td><code>line console 0</code></td><td>Configura el puerto consola físico</td></tr>
+    <tr><td><code>password cisco</code></td><td>Contraseña para esa línea</td></tr>
+    <tr><td><code>login</code></td><td>Activa que pida contraseña</td></tr>
+    <tr><td><code>line vty 0 4</code></td><td>Configura 5 sesiones virtuales Telnet/SSH</td></tr>
+    <tr><td><code>service password-encryption</code></td><td>Encripta TODAS las contraseñas en plain text</td></tr>
+    <tr><td><code>banner motd $...$</code></td><td>Mensaje del día (motd). Texto entre delimitadores</td></tr>
+  </table>
+
+  <h3>enable password vs enable secret</h3>
+  <ul>
+    <li><code>enable password</code>: contraseña en texto plano (insegura). Obsoleto.</li>
+    <li><code>enable secret</code>: contraseña encriptada con MD5. <strong>Siempre usa este</strong>.</li>
+  </ul>
+
+  <h3>Configurar interfaces</h3>
+  <p>Para que una interfaz funcione necesita:</p>
+  <ol>
+    <li>Una dirección IP (y máscara) configurada.</li>
+    <li>Estar activada (<code>no shutdown</code>) — por defecto las interfaces vienen apagadas.</li>
+    <li>Estar conectada físicamente a otro dispositivo.</li>
+    <li>(Opcional pero recomendado) Descripción.</li>
+  </ol>
+
+  <h4>Plantilla para interfaz Ethernet</h4>
+  <pre><span class="prompt">R1(config)#</span> interface GigabitEthernet0/0/0
+<span class="prompt">R1(config-if)#</span> ip address 192.168.10.1 255.255.255.0
+<span class="prompt">R1(config-if)#</span> ipv6 address 2001:db8:acad:1::1/64
+<span class="prompt">R1(config-if)#</span> description Link to LAN 1
+<span class="prompt">R1(config-if)#</span> no shutdown</pre>
+
+  <h4>Plantilla para interfaz Serial</h4>
+  <pre><span class="prompt">R1(config)#</span> interface Serial0/0/0
+<span class="prompt">R1(config-if)#</span> ip address 209.165.200.225 255.255.255.252
+<span class="prompt">R1(config-if)#</span> clock rate 64000      <span class="comment">! Solo en lado DCE</span>
+<span class="prompt">R1(config-if)#</span> description Link to R2
+<span class="prompt">R1(config-if)#</span> no shutdown</pre>
+
+  <h3>Topología Dual Stack</h3>
+  <div class="callout theory">
+    "Dual Stack" significa que el router maneja IPv4 e IPv6 simultáneamente en las mismas interfaces. Se configuran ambas direcciones y el router enruta según el tipo de paquete.
+  </div>
+
+  <h3>Interfaces Loopback</h3>
+  <p>Interfaz <strong>lógica</strong>, interna al router. No conectada a nada físico. Siempre está en estado "up" mientras el router funcione.</p>
+
+  <h4>¿Para qué sirven?</h4>
+  <ul>
+    <li>Probar y gestionar el router.</li>
+    <li>Simular redes detrás del router (en laboratorios).</li>
+    <li>Identificar al router en protocolos como OSPF (router-ID).</li>
+    <li>Simular un enlace a Internet en prácticas.</li>
+  </ul>
+
+  <h4>Configuración</h4>
+  <pre><span class="prompt">R1(config)#</span> interface loopback 0
+<span class="prompt">R1(config-if)#</span> ip address 10.0.0.1 255.255.255.0</pre>
+  <p>No necesitas <code>no shutdown</code> — las loopbacks vienen activas por defecto.</p>
+
+  <h3>Cliente DHCPv4 (auto-IP)</h3>
+  <p>Si quieres que la interfaz de tu router obtenga IP de un servidor DHCP:</p>
+  <pre><span class="prompt">R1(config-if)#</span> ip address dhcp</pre>
+
+  <h3>Guardar la configuración</h3>
+  <pre><span class="prompt">R1#</span> copy running-config startup-config
+Destination filename [startup-config]?
+Building configuration...
+[OK]</pre>
+  <p>Atajos: <code>wr</code>, <code>copy run start</code>.</p>
+
+  <h3>Comandos de verificación esenciales</h3>
+  <table>
+    <tr><th>Comando</th><th>Para qué</th></tr>
+    <tr><td><code>show running-config</code></td><td>Ver config activa</td></tr>
+    <tr><td><code>show startup-config</code></td><td>Ver config guardada</td></tr>
+    <tr><td><code>show ip interface brief</code></td><td>Resumen de interfaces, IPs, estado</td></tr>
+    <tr><td><code>show interfaces</code></td><td>Detalle de cada interfaz</td></tr>
+    <tr><td><code>show ip route</code></td><td>Tabla de routing</td></tr>
+    <tr><td><code>show version</code></td><td>IOS, hardware, tiempo de uptime</td></tr>
+    <tr><td><code>show cdp neighbors</code></td><td>Vecinos Cisco directos</td></tr>
+  </table>
+
+  <h3>Atajos y trucos del IOS</h3>
+  <ul>
+    <li><code>Tab</code> — autocompleta comandos.</li>
+    <li><code>?</code> — muestra opciones disponibles.</li>
+    <li><code>↑↓</code> — historial de comandos.</li>
+    <li><code>Ctrl+Z</code> — sale a modo privilegiado desde cualquier modo.</li>
+    <li><code>do &lt;comando&gt;</code> — ejecuta un comando de modo privilegiado sin salir de config.</li>
+    <li><code>no &lt;comando&gt;</code> — deshace un comando.</li>
+    <li><code>terminal length 0</code> — quita el "--More--" en outputs largos.</li>
+  </ul>
+
+  <h3>Modos del IOS — recordatorio</h3>
+  <table>
+    <tr><th>Prompt</th><th>Modo</th><th>Cómo entrar</th><th>Qué puedes hacer</th></tr>
+    <tr><td><code>Router&gt;</code></td><td>Usuario</td><td>Al conectar</td><td>Comandos básicos (ping, show muy limitados)</td></tr>
+    <tr><td><code>Router#</code></td><td>Privilegiado (EXEC)</td><td><code>enable</code></td><td>Todos los show, debug, reload</td></tr>
+    <tr><td><code>Router(config)#</code></td><td>Configuración global</td><td><code>configure terminal</code></td><td>Cambios al sistema completo</td></tr>
+    <tr><td><code>Router(config-if)#</code></td><td>Configuración de interfaz</td><td><code>interface X</code></td><td>Cambios a esa interfaz</td></tr>
+    <tr><td><code>Router(config-line)#</code></td><td>Configuración de línea</td><td><code>line console / vty</code></td><td>Cambios a consola/vty</td></tr>
+    <tr><td><code>Router(config-router)#</code></td><td>Configuración de protocolo de routing</td><td><code>router ospf 1</code></td><td>Configurar OSPF, RIP, etc.</td></tr>
+  </table>
+
+  <div class="callout do">Este tema es la base de TODO lo que haces en Packet Tracer. Si dominas configuración básica de router, ya tienes 50% del parcial.</div>
+
+  <div class="checkpoint">
+    <h4>✓ Checkpoint Tema 9</h4>
+    <label><input type="checkbox" data-check="t9-1"> Conozco los 3 modos del IOS y cómo navegar entre ellos</label>
+    <label><input type="checkbox" data-check="t9-2"> Sé configurar hostname, passwords, banner</label>
+    <label><input type="checkbox" data-check="t9-3"> Sé configurar interfaces Ethernet y Serial</label>
+    <label><input type="checkbox" data-check="t9-4"> Entiendo enable secret vs enable password</label>
+    <label><input type="checkbox" data-check="t9-5"> Sé qué hace service password-encryption</label>
+    <label><input type="checkbox" data-check="t9-6"> Sé guardar la configuración (copy run start)</label>
+    <label><input type="checkbox" data-check="t9-7"> Entiendo qué son las interfaces loopback</label>
+    <button class="module-complete-btn" data-complete="8">Marcar tema estudiado</button>
+  </div>
+
+  <div class="module-nav">
+    <button data-goto="7">← Anterior</button>
+    <button disabled>Fin de la guía 🎉</button>
+  </div>
+</section>
+
+</main>
+
+<script>
+  const modules = document.querySelectorAll('.module')
+  const navLinks = document.querySelectorAll('nav a[data-module]')
+  const STORAGE_KEY = 'temas_progress_v1'
+
+  function loadProgress() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {checks:{}, completed:{}} }
+    catch { return {checks:{}, completed:{}} }
+  }
+  function saveProgress(p) { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)) }
+
+  let progress = loadProgress()
+
+  function showModule(idx) {
+    modules.forEach(m => m.classList.remove('active'))
+    navLinks.forEach(a => a.classList.remove('active'))
+    const target = document.querySelector(`.module[data-module="${idx}"]`)
+    const link = document.querySelector(`nav a[data-module="${idx}"]`)
+    if (target) target.classList.add('active')
+    if (link) link.classList.add('active')
+    window.scrollTo(0, 0)
+    document.querySelector('aside').classList.remove('open')
+  }
+
+  navLinks.forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault()
+      showModule(a.dataset.module)
+    })
+  })
+
+  document.querySelectorAll('[data-goto]').forEach(b => {
+    b.addEventListener('click', () => showModule(b.dataset.goto))
+  })
+
+  document.querySelectorAll('input[type="checkbox"][data-check]').forEach(cb => {
+    const key = cb.dataset.check
+    if (progress.checks[key]) {
+      cb.checked = true
+      cb.parentElement.classList.add('checked')
+    }
+    cb.addEventListener('change', () => {
+      progress.checks[key] = cb.checked
+      cb.parentElement.classList.toggle('checked', cb.checked)
+      saveProgress(progress)
+    })
+  })
+
+  document.querySelectorAll('[data-complete]').forEach(btn => {
+    const mod = btn.dataset.complete
+    if (progress.completed[mod]) {
+      btn.classList.add('done')
+      btn.textContent = '✓ Tema estudiado'
+    }
+    btn.addEventListener('click', () => {
+      progress.completed[mod] = !progress.completed[mod]
+      if (progress.completed[mod]) {
+        btn.classList.add('done')
+        btn.textContent = '✓ Tema estudiado'
+      } else {
+        btn.classList.remove('done')
+        btn.textContent = 'Marcar tema estudiado'
+      }
+      saveProgress(progress)
+      updateProgressUI()
+    })
+  })
+
+  function updateProgressUI() {
+    const total = 9
+    const done = Object.values(progress.completed).filter(Boolean).length
+    const pct = (done / total) * 100
+    document.getElementById('progressFill').style.width = pct + '%'
+    document.getElementById('progressText').textContent = `${done} / ${total} temas estudiados`
+    navLinks.forEach(a => {
+      const idx = a.dataset.module
+      const span = a.querySelector('span')
+      if (progress.completed[idx]) {
+        span.className = 'check'
+        span.textContent = '✓'
+      } else {
+        span.className = 'pending'
+        span.textContent = '○'
+      }
+    })
+  }
+  updateProgressUI()
+
+  showModule(0)
+</script>
+
+</body>
+</html>
