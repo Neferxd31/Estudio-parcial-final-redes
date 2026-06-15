@@ -324,24 +324,76 @@
     overflow-x: auto;
   }
 
+  /* Tables responsive wrapper */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 16px 0; }
+  .table-wrap table { margin: 0; min-width: 480px; }
+
   /* Mobile hamburger */
   .menu-toggle { display: none; }
+
+  /* Tablet */
+  @media (max-width: 1024px) {
+    main { padding: 32px 32px; }
+    h2 { font-size: 24px; }
+    h3 { font-size: 18px; }
+    pre { font-size: 12.5px; }
+    table { font-size: 13px; }
+    th, td { padding: 8px 10px; }
+  }
+
+  /* Mobile */
   @media (max-width: 900px) {
-    aside { transform: translateX(-100%); transition: transform 0.3s; z-index: 100; }
+    aside {
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+      z-index: 100;
+      width: 85%;
+      max-width: 320px;
+      box-shadow: 4px 0 12px rgba(0,0,0,0.3);
+    }
     aside.open { transform: translateX(0); }
-    main { margin-left: 0; padding: 20px; width: 100%; }
+    main { margin-left: 0; padding: 70px 18px 24px; width: 100%; max-width: 100%; }
     .menu-toggle {
       display: block;
       position: fixed;
-      top: 12px; right: 12px;
+      top: 12px; left: 12px;
       z-index: 101;
       background: var(--accent);
       color: white;
       border: none;
-      padding: 10px 14px;
+      padding: 10px 16px;
       border-radius: 6px;
       cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
+    table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; }
+    th, td { white-space: normal; min-width: 100px; }
+    pre { font-size: 12px; padding: 12px; }
+    .step { padding: 16px 16px 16px 52px; }
+    .step-num { left: 12px; top: 14px; width: 28px; height: 28px; font-size: 13px; }
+    .module-nav { flex-direction: column; gap: 10px; }
+    .module-nav button { width: 100%; }
+    .copy-btn { opacity: 1; }
+  }
+
+  /* Small phones */
+  @media (max-width: 480px) {
+    main { padding: 64px 12px 20px; }
+    h2 { font-size: 20px; }
+    h2 .badge { display: inline-block; margin: 6px 0 0; font-size: 11px; }
+    h3 { font-size: 16px; padding-left: 8px; }
+    h4 { font-size: 15px; }
+    body { font-size: 14px; }
+    pre { font-size: 11px; padding: 10px; }
+    .callout { padding: 12px 14px; font-size: 13.5px; }
+    .checkpoint { padding: 14px; }
+    .checkpoint label { font-size: 13.5px; }
+    code:not(pre code) { font-size: 12px; word-break: break-word; }
+    .topo { font-size: 11px; padding: 14px; }
+    aside h1 { font-size: 14px; }
+    nav a { font-size: 13px; padding: 9px 16px; }
   }
 </style>
 </head>
